@@ -28,7 +28,16 @@ class Customer extends Model
      * @var array
      */
 //    protected $fillable = ['company_id', 'name', 'email', 'created_at', 'updated_at', 'status'];
-        protected $guarded = [];
+    protected $guarded = [];
+
+    public function getStatusAttribute($attribute)
+    {
+        return $this->activeOptions()[$attribute];
+    }
+
+    protected $attributes = [
+        'status' => 1
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -45,5 +54,13 @@ class Customer extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 1);
+    }
+
+    public function activeOptions()
+    {
+        return [
+            '1' => 'Active',
+            '0' => 'Inactive',
+        ];
     }
 }

@@ -16,13 +16,14 @@ $cnt = 1;
     Customer List
 @endsection
 <link rel="stylesheet" type="text/css" href="{{ asset('/sass/marquee.css') }}"/>
+<script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
 
 
 @section('content')
     <div class="row">
         <div class="col-11"><h1>Customers List</h1></div>
         <div class="col-1"><a href="/customers/create" id="addCustomer" class="badge badge-primary Shadow"
-                               title="Add Customer">
+                              title="Add Customer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path fill="none" d="M0 0h24v24H0V0z"/>
                     <path
@@ -34,6 +35,8 @@ $cnt = 1;
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
         Launch demo modal
     </button>
+
+
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
@@ -49,8 +52,6 @@ $cnt = 1;
         </div>
     </div>
 
-
-
     <div class="row">
         <div class="col-lg-6">
             <div class="card-header Shadow">
@@ -62,6 +63,7 @@ $cnt = 1;
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Company name</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -75,12 +77,32 @@ $cnt = 1;
                                 </div>
                             </div>
                         </td>
-                        <td><a style="color: #636b6f" href="#" data-target="#exampleModalCenter" data-toggle="modal">
+                        <td><a style="color: #636b6f" href="#{{$customer->company->id}}">
                                 <marquee behavior="alternate" direction="left"
                                          onmouseover="this.stop();"
                                          onmouseout="this.start();"
                                          scrollamount="3">{{$customer->company->name}}</marquee>
                             </a></td>
+                        <td style="width: 25%">
+                            <form action="/customers/{{$customer->id}}" method="post">
+                                <a href="/customers/{{$customer->id}}"
+                                   style="border-right: 1px solid;border-bottom: 1px dashed">
+                                    <ion-icon size="small" src="{{asset('/images/icons/ios-eye.svg')}}"></ion-icon>
+                                </a>
+                                <a href="/customers/{{$customer->id}}/edit"
+                                   style="border-right: 1px solid;border-bottom: 1px dashed">
+                                    <ion-icon size="small" src="{{asset('/images/icons/ios-build.svg')}}"></ion-icon>
+                                </a>
+
+                                @method('delete')
+                                @csrf
+                                <button type="submit" class="btn btn-danger">
+                                    <ion-icon size="small" src="{{asset('/images/icons/ios-trash.svg')}}"></ion-icon>
+                                </button>
+                            </form>
+
+
+                        </td>
                 </tr>
                 @endforeach
                 </tbody>
@@ -97,6 +119,7 @@ $cnt = 1;
 
                     <th scope="col">Name</th>
                     <th scope="col">Company name</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -105,16 +128,30 @@ $cnt = 1;
                         <td class="labelContainer" style="color: black">
                             <div class="boardindex_themefitted_board_main">
                                 <div class="boardindex_themefitted_board_main_description scroll_on_hover ellipsis">
-                                    {{$customer->name}}
+                                    <a href="/customers/{{$customer->id}}">{{$customer->name}}</a>
                                 </div>
                             </div>
                         </td>
-                        <td><a style="color: #636b6f" href="#">
+                        <td><a style="color: #636b6f" href="#{{$customer->company->id}}">
                                 <marquee behavior="alternate" direction="left"
                                          onmouseover="this.stop();"
                                          onmouseout="this.start();"
                                          scrollamount="3">{{$customer->company->name}}</marquee>
                             </a></td>
+                        <td>
+                            <a href="/customers/{{$customer->id}}"
+                               style="border-right: 1px solid;border-bottom: 1px dashed">
+                                <ion-icon size="small" src="{{asset('/images/icons/ios-eye.svg')}}"></ion-icon>
+                            </a>
+                            <a href="/customers/{{$customer->id}}/edit"
+                               style="border-right: 1px solid;border-bottom: 1px dashed">
+                                <ion-icon size="small" src="{{asset('/images/icons/ios-build.svg')}}"></ion-icon>
+                            </a>
+                            <a href="#" onclick="myFunction()"
+                               style="border-right: 1px solid;border-bottom: 1px dashed">
+                                <ion-icon size="small" src="{{asset('/images/icons/ios-trash.svg')}}"></ion-icon>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
 
@@ -122,13 +159,16 @@ $cnt = 1;
             </table>
         </div>
     </div>
+
     <br><br>
 
     @foreach($companies as $company)
         @if($cnt>8)
             {{$cnt==1}}
         @endif
-        <table class="table table-striped table-{{$color[$cnt]}}  table-hover table-bordered"
+
+
+        <table id="{{$company->id}}" class="table table-striped table-{{$color[$cnt]}}  table-hover table-bordered"
                style="box-shadow: 27px 16px 34px 15px rgba(0,0,0,0.61)">
             <thead class="table-dark">
             <tr>
@@ -165,6 +205,20 @@ $cnt = 1;
         <br>
         <?php $cnt++?>
     @endforeach
+
+    <form action="" method="post" id="delete">
+        @method('delete')
+        @csrf
+        <button type="submit" hidden></button>
+    </form>
+    <script>
+        function myFunction() {
+
+            if (confirm("Ishinchingiz komilmi ?!")) {
+                $('#delete').submit();
+            }
+        }
+    </script>
 
     <script src="{{ asset('/js/jquery-1.6.min.js') }}"></script>
     <script src="{{ asset('/js/marquee.js') }}"></script>
