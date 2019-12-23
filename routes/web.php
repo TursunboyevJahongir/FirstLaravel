@@ -15,10 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-\Illuminate\Support\Facades\Route::get('about', function () {
-    return "about us";
-});
+//\Illuminate\Support\Facades\Route::get('about', function () {
+//    return view('about');
+//});
+
+\Illuminate\Support\Facades\Route::view('about','about');
 
 \Illuminate\Support\Facades\Route::get('contact', function () {
-    return "contact us";
+    return view('contact');
 });
+
