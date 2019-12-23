@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+\Illuminate\Support\Facades\Route::get('about', function () {
+    return "about us";
+});
+
+\Illuminate\Support\Facades\Route::get('contact', function () {
+    return "contact us";
+});
