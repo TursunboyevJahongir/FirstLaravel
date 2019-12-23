@@ -25,15 +25,4 @@ Route::get('/', function () {
     return view('contact');
 });
 
-\Illuminate\Support\Facades\Route::get('customers', function () {
-    $customers = [
-        'John Doe1',
-        'John Doe2',
-        'John Doe3'
-    ];
-
-
-    return view('internals.customers',
-    ['customers' => $customers]
-    );
-});
+\Illuminate\Support\Facades\Route::get('customers', 'CustomersController@list');
