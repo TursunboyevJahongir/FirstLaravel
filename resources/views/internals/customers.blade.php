@@ -1,5 +1,11 @@
-<h1>Customers</h1>
+@extends('layout')
 
-@foreach($customers as $customer)
-    <li>{{$customer}}</li>
-@endforeach
+@section('content')
+    <h1>Customers</h1>
+
+    <ul>
+        @foreach($customers as $customer)
+            <li>{{$customer}}</li>
+        @endforeach
+    </ul>
+@endsection
