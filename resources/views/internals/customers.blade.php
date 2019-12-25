@@ -10,6 +10,7 @@
             <button class="btn btn-outline-secondary" type='submit'>Add</button>
         </div>
     </div>
+    <i style="color: red;position: absolute"><b>{{$errors->first('name')}}</b></i>
         @csrf
     </form>
 
