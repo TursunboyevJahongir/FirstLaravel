@@ -1,0 +1,24 @@
+/*
+https://jsfiddle.net/MadLittleMods/nsMWX/
+ */
+.ellipsis {
+    text-overflow: ellipsis;
+}
+
+.boardindex_themefitted_board_main {
+    width: 220px    ;
+
+}
+
+.boardindex_themefitted_board_main_description {
+    overflow: hidden;
+}
+
+
+
+
+
+
+
+
+

@@ -30,4 +30,6 @@ Route::get('contact', function () {
 
 Route::get('customers', 'CustomersController@list');
 
+
 Route::post('customers', 'CustomersController@store');
+
