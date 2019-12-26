@@ -20,6 +20,9 @@ class CustomersController extends Controller
 
     public function store()
     {
+        /*
+         * Available Validation Rules  https://laravel.com/docs/5.8/validation#available-validation-rules
+         */
         $data = request()->validate([
             'name'=>'required|min:3',
             'email'=>'required|email'

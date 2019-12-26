@@ -3,24 +3,13 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>First project</title>
+    <title>@yield('title','First project in Laravel')</title>
+
 </head>
-<body>
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link " aria-selected="false" href="/">home</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="about">About</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="contact">Contact</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="customers">Customer</a>
-    </li>
-</ul>
+<body >
+@include('navbar');
 <div class="container">
+
     @yield('content')
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
