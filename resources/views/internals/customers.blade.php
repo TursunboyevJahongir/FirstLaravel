@@ -45,7 +45,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                    @foreach($activeCustomers as  $key=> $customer)
+                    @foreach($activeCustomers as $customer)
 
                         <td class="labelContainer " style="color: black">
                             <div class="boardindex_themefitted_board_main">
@@ -79,13 +79,13 @@
                 </thead>
                 <tbody>
                 <tr>
-                    @foreach($inactiveCustomers as  $key=> $customer)
+                    @foreach($inactiveCustomers as $customer)
 
                         <td class="labelContainer" style="color: black">
                             <div class="boardindex_themefitted_board_main">
-                                <div class=" boardindex_themefitted_board_main_description scroll_on_hover ellipsis">
+                                <div class="boardindex_themefitted_board_main_description scroll_on_hover ellipsis">
                                     {{$customer->name}}
-                                </div>
+                                </div >
                             </div>
                         </td>
                         <td><a style="color: #636b6f" href="#">
@@ -101,6 +101,6 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-1.6.min.js"></script>
+    <script src="{{ asset('/js/jquery-1.6.min.js') }}"></script>
     <script src="{{ asset('/js/marquee.js') }}"></script>
 @endsection

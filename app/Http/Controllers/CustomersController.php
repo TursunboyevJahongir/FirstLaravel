@@ -10,7 +10,8 @@ class CustomersController extends Controller
 {
     public function list()
     {
-        $activeCustomers = DB::table('customers')->where('status', 1)->get();
+//        $activeCustomers = Customer::where('status', 1)->get();
+        $activeCustomers = Customer::active()->get();
         $inactiveCustomers = DB::table('customers')->where('status',  0)->get();
 
 
@@ -26,14 +27,10 @@ class CustomersController extends Controller
         $data = request()->validate([
             'name' => 'required|min:3',
             'email' => 'required|email',
-            'status' => 'required'
+            'status' => ''
         ]);
-        $customer = new Customer();
-        $customer->name = \request('name');
-        $customer->email = \request('email');
-        $customer->status = \request('status');
+        Customer::create($data);
 
-        $customer->save();
         return back();
     }
 }
