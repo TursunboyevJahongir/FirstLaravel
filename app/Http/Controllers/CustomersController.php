@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Customer;
 
 use Illuminate\Support\Facades\DB;
@@ -12,10 +13,11 @@ class CustomersController extends Controller
     {
 //        $activeCustomers = Customer::where('status', 1)->get();
         $activeCustomers = Customer::active()->get();
-        $inactiveCustomers = DB::table('customers')->where('status',  0)->get();
+        $inactiveCustomers = Customer::where('status', 0)->get();
+        $companies = Company::all();
 
 
-        return view('internals.customers',compact('activeCustomers','inactiveCustomers')
+        return view('internals.customers',compact('activeCustomers','inactiveCustomers','companies')
         );
     }
 
@@ -27,7 +29,8 @@ class CustomersController extends Controller
         $data = request()->validate([
             'name' => 'required|min:3',
             'email' => 'required|email',
-            'status' => ''
+            'status' => 'required',
+            'company_id' => 'required'
         ]);
         Customer::create($data);
 
