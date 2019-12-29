@@ -9,16 +9,21 @@ use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller
 {
-    public function list()
+    public function index()
     {
 //        $activeCustomers = Customer::where('status', 1)->get();
         $activeCustomers = Customer::active()->get();
         $inactiveCustomers = Customer::where('status', 0)->get();
         $companies = Company::all();
 
-
-        return view('internals.customers',compact('activeCustomers','inactiveCustomers','companies')
+        return view('customers.index',compact('activeCustomers','inactiveCustomers','companies')
         );
+    }
+
+    public function create()
+    {
+        $companies = Company::all();
+        return view('customers.create',compact('companies'));
     }
 
     public function store()
@@ -34,6 +39,12 @@ class CustomersController extends Controller
         ]);
         Customer::create($data);
 
-        return back();
+        return redirect('/customers');
+    }
+
+    public function show(Customer $customer){
+//        $customer = Customer::where('id',$customer)->firstOrFail();
+
+        return view('customers.show', compact('customer'));
     }
 }

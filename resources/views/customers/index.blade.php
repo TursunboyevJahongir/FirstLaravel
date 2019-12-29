@@ -19,48 +19,46 @@ $cnt = 1;
 
 
 @section('content')
-    <h1>Customers</h1>
+    <div class="row">
+        <div class="col-11"><h1>Customers List</h1></div>
+        <div class="col-1"><a href="/customers/create" id="addCustomer" class="badge badge-primary Shadow"
+                               title="Add Customer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="none" d="M0 0h24v24H0V0z"/>
+                    <path
+                        d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 8c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm-6 4c.22-.72 3.31-2 6-2 2.7 0 5.8 1.29 6 2H9zm-3-3v-3h3v-2H6V7H4v3H1v2h3v3z"/>
+                </svg>
+            </a></div>
+    </div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        Launch demo modal
+    </button>
 
-    <form action="customers" class="pb-4" method="post">
-        <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" placeholder="Enter email" name="email" value="{{old('email')}}">
-            <i class="mb-3" style="color: red"><b>{{$errors->first('email')}}</b></i>
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Name Customer</label>
-            <input type="text" class="form-control" placeholder="Name" name="name" value="{{old('name')}}">
-            <u class="mb-3" style="color: red"><b>{{$errors->first('name')}}</b></u>
-        </div>
-        <div class="row pb-4">
-            <div class="col-lg-9">
-                <label>Company name:</label>
-                <select class="form-control custom-select custom-select-sm form-control" name="company_id" id="company">
-                    @foreach($companies as $company)
-                        <option selected value="{{$company->id}}">{{$company->name}}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class=" col-lg-3">
-                <label>Status :</label>
-                <select class="form-control custom-select custom-select-sm form-control" name="status" id="status">
-                    <option selected value="1">Active</option>
-                    <option value="0" style="background-color: #ff2f99;color: white">Inavtive</option>
-                </select>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        @csrf
-    </form>
+    </div>
+
+
 
     <div class="row">
         <div class="col-lg-6">
-            <div class="card-header" >
+            <div class="card-header Shadow">
                 <h3>Active</h3>
             </div>
-            <table class="table table-striped   table-hover table-bordered" style="box-shadow: -15px 1px 31px 4px rgba(62,68,72,0.61)">
-                <thead class="table-active">
+            <table class="table table-striped table-hover table-bordered"
+                   style="box-shadow: -15px 1px 31px 4px rgba(62,68,72,0.61)">
+                <thead class="table-active  ">
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Company name</th>
@@ -73,11 +71,11 @@ $cnt = 1;
                         <td class="labelContainer " style="color: black">
                             <div class="boardindex_themefitted_board_main">
                                 <div class=" boardindex_themefitted_board_main_description scroll_on_hover ellipsis">
-                                    {{$customer->name}}
+                                    <a href="/customers/{{$customer->id}}">{{$customer->name}}</a>
                                 </div>
                             </div>
                         </td>
-                        <td><a style="color: #636b6f" href="#">
+                        <td><a style="color: #636b6f" href="#" data-target="#exampleModalCenter" data-toggle="modal">
                                 <marquee behavior="alternate" direction="left"
                                          onmouseover="this.stop();"
                                          onmouseout="this.start();"
@@ -85,15 +83,15 @@ $cnt = 1;
                             </a></td>
                 </tr>
                 @endforeach
-
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-6" >
-            <div class="card-header" >
+        <div class="col-lg-6">
+            <div class="card-header Shadow">
                 <h3>Inactive</h3>
             </div>
-            <table class="table table-striped  table-danger table-hover table-bordered" style="box-shadow: 19px 1px 36px -4px rgba(255,47,153,0.61)">
+            <table class="table table-striped  table-danger table-hover table-bordered"
+                   style="box-shadow: 19px 1px 36px 4px rgba(255,47,153,0.61)">
                 <thead class="thead-dark">
                 <tr>
 
@@ -104,7 +102,6 @@ $cnt = 1;
                 <tbody>
                 @foreach($inactiveCustomers as $customer)
                     <tr>
-
                         <td class="labelContainer" style="color: black">
                             <div class="boardindex_themefitted_board_main">
                                 <div class="boardindex_themefitted_board_main_description scroll_on_hover ellipsis">
@@ -135,7 +132,7 @@ $cnt = 1;
                style="box-shadow: 27px 16px 34px 15px rgba(0,0,0,0.61)">
             <thead class="table-dark">
             <tr>
-                <div class="card-header" style="box-shadow: 5px 28px 67px 11px rgba(0,0,0,0.61);">
+                <div class="card-header Shadow" style="box-shadow: 5px 28px 67px 11px rgba(0,0,0,0.61);">
                     <h3>{{$company->name}}</h3>
                 </div>
             </tr>
@@ -168,7 +165,6 @@ $cnt = 1;
         <br>
         <?php $cnt++?>
     @endforeach
-
 
     <script src="{{ asset('/js/jquery-1.6.min.js') }}"></script>
     <script src="{{ asset('/js/marquee.js') }}"></script>
