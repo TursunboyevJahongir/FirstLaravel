@@ -53,7 +53,7 @@ $cnt = 1;
     </div>
 
     <div class="row">
-        <div class="col-lg-6">
+            <div class="col-lg-6" id="pjax-container">
             <div class="card-header Shadow">
                 <h3>Active</h3>
             </div>
@@ -100,13 +100,12 @@ $cnt = 1;
                                     <ion-icon size="small" src="{{asset('/images/icons/ios-trash.svg')}}"></ion-icon>
                                 </button>
                             </form>
-
-
                         </td>
                 </tr>
                 @endforeach
                 </tbody>
             </table>
+
         </div>
         <div class="col-lg-6">
             <div class="card-header Shadow">
@@ -157,6 +156,7 @@ $cnt = 1;
 
                 </tbody>
             </table>
+{{--            {{$inactiveCustomers->links()}}--}}
         </div>
     </div>
 

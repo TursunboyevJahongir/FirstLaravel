@@ -56,6 +56,10 @@ class Customer extends Model
         return $query->where('status', 1);
     }
 
+//    public function scopePagination($query){
+//        return $query->Customer::paginate(3);
+//    }
+
     public function activeOptions()
     {
         return [

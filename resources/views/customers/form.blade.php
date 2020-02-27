@@ -1,3 +1,6 @@
+<?php
+echo \App\Http\Controllers\Controller::getHiddenToken()
+?>
 <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
     <input type="email" class="form-control" placeholder="Enter email" name="email"

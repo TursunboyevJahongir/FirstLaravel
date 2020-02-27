@@ -7,6 +7,7 @@ use App\Customer;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Psy\Util\Str;
 
 class CustomersController extends Controller
 {
@@ -21,13 +22,14 @@ class CustomersController extends Controller
 
     public function index()
     {
-//        $activeCustomers = Customer::where('status', 1)->get();
+//        $customers = Customer::pagination(5);
+
 //        $color = new $this->$color;
         $activeCustomers = Customer::active()->get();
         $inactiveCustomers = Customer::where('status', 0)->get();
         $companies = Company::all();
 
-        return view('customers.index', compact('activeCustomers', 'inactiveCustomers', 'companies', 'color')
+        return view('customers.index', compact('activeCustomers', 'inactiveCustomers', 'companies', 'customers')
         );
     }
 
@@ -40,6 +42,19 @@ class CustomersController extends Controller
 
     public function store()
     {
+        if ($token = session()->get('inputToken')) {
+            if ($token === \request()->post('antiDoubleSave')) {
+                session()->flash('inputToken', '');
+                echo "cKRFp9znDLdAwiOacmKB8b10zIfdt2Lr<br/>";
+                echo $token;
+                exit;
+            } else {
+                echo "xaxax";
+                exit;
+//                return redirect('/customers');
+            }
+        }
+
         /*
          * Available Validation Rules  https://laravel.com/docs/5.8/validation#available-validation-rules
          */
