@@ -30,28 +30,26 @@ class ManufacturerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'ico'=>'nullable',
+            'name' => 'required',
+            'ico' => 'nullable',
         ]);
 
-        if(!$request->hasFile('ico')) {
+        if (!$request->hasFile('ico')) {
             return response()->json(['upload_file_not_found'], 400);
         }
         $file = $request->file('ico');
-        if(!$file->isValid()) {
+        if (!$file->isValid()) {
             return response()->json(['invalid_file_upload'], 400);
         }
         $path = public_path() . '/uploads/manufacturers/';
-        $fileName = $file->getATime().'.'.$file->getClientOriginalExtension();
+        $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
         $file->move($path, $fileName);
-        $path = '/uploads/manufacturers/'.$fileName;
+        $path = '/uploads/manufacturers/' . $fileName;
 
         $all = $request->all();
         $all['ico'] = $path;
         $image = Image::make(public_path($path))->fit(300);
         $image->save();
-//        dump($all['ico']);
-//        die;
         $data = Manufacturer::create($all);
 
         return response()->json([
@@ -84,14 +82,33 @@ class ManufacturerController extends Controller
      * @param Manufacturer $id
      * @return JsonResponse
      */
-    public function update(Request $request,Manufacturer $id)
+    public function update(Request $request, Manufacturer $id)
     {
         $request->validate([
-            'name'=>'nullable',
-            'ico'=>'nullable',
+            'name' => 'nullable',
+            'ico' => 'nullable',
         ]);
 
-        $id->update($request->all());
+        $all = $request->all();
+        if ($request->file()) {
+            if (!$request->hasFile('ico')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('ico');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/manufacturers/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/manufacturers/' . $fileName;
+
+            $all['ico'] = $path;
+            $image = Image::make(public_path($path))->fit(300);
+            $image->save();
+        }
+
+        $id->update($all);
 
         return response()->json([
             'message' => 'Great success! updated',

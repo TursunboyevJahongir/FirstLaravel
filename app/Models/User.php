@@ -29,7 +29,7 @@ class User extends Model
     /**
      * @var array
      */
-    protected $fillable = ['address_id', 'first_name', 'last_name', 'image', 'email', 'phone', 'password', 'api_token', 'remember_token', 'created_at', 'updated_at'];
+    protected $fillable = ['address_id', 'name', 'image', 'email', 'phone', 'password', 'api_token', 'remember_token', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

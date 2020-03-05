@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Intervention\Image\Facades\Image;
 
 class CategoryController extends Controller
 {
@@ -33,9 +34,26 @@ class CategoryController extends Controller
             'parent_id' => 'nullable',
             'name' => 'required',
             'thumb' => 'nullable',
-            'thumb_128' => 'nullable',
         ]);
-        $data = Category::create($request->all());
+        $all = $request->all();
+        if ($request->file('thumb')) {
+            if (!$request->hasFile('thumb')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+        $file = $request->file('thumb');
+        if (!$file->isValid()) {
+            return response()->json(['invalid_file_upload'], 400);
+        }
+        $path = public_path() . '/uploads/categories/';
+        $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+        $file->move($path, $fileName);
+        $path = '/uploads/categories/' . $fileName;
+        $all['thumb'] = $path;
+        $all['thumb_128'] = '/uploads/categories/128_' . $fileName;
+        Image::make(public_path($path))->fit(128)->save(public_path('/uploads/categories/') . '128_' . $fileName)->save();
+        Image::make(public_path($path))->fit(1024)->save();
+        }
+        $data = Category::create($all);
 
         return response()->json([
             'status' => 'ok',
@@ -73,10 +91,27 @@ class CategoryController extends Controller
             'parent_id' => 'nullable',
             'name' => 'nullable',
             'thumb' => 'nullable',
-            'thumb_128' => 'nullable',
         ]);
 
-        $id->update($request->all());
+        $all = $request->all();
+        if ($request->file('thumb')) {
+            if (!$request->hasFile('thumb')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('thumb');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/categories/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/categories/' . $fileName;
+            $all['thumb'] = $path;
+            $all['thumb_128'] = '/uploads/categories/128_' . $fileName;
+            Image::make(public_path($path))->fit(128)->save(public_path('/uploads/categories/') . '128_' . $fileName)->save();
+            Image::make(public_path($path))->fit(1024)->save();
+        }
+        $id->update($all);
 
         return response()->json([
             'message' => 'Great success! Category updated',

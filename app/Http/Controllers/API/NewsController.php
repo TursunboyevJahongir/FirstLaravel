@@ -123,32 +123,34 @@ class NewsController extends Controller
             'thumb_1024' => 'nullable',
             'view' => 'nullable',
         ]);
-
-        if (!$request->hasFile('image')) {
-            return response()->json(['upload_file_not_found'], 400);
-        }
-        $file = $request->file('image');
-        if (!$file->isValid()) {
-            return response()->json(['invalid_file_upload'], 400);
-        }
-        $path = public_path() . '/uploads/';
-        $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
-        $file->move($path, $fileName);
-        $path = '/uploads/' . $fileName;
+//        dd($request->all());
 
         $all = $request->all();
-        $all['image'] = $path;
-        $all['thumb_128'] = '/uploads/128_' . $fileName;
-        $all['thumb_255'] = '/uploads/255_' . $fileName;
-        $all['thumb_1024'] = '/uploads/1024_' . $fileName;
-        $image128 = Image::make(public_path($path))->fit(128)->save(public_path('/uploads/') . '128_' . $fileName);
-        $image256 = Image::make(public_path($path))->fit(255)->save(public_path('/uploads/') . '255_' . $fileName);
-        $image1024 = Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/') . '1024_' . $fileName);
-        $image128->save();
-        $image256->save();
-        $image1024->save();
+        if ($request->file('image')) {
+            if (!$request->hasFile('image')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('image');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/' . $fileName;
 
-        $id->update($request->all());
+            $all['image'] = $path;
+            $all['thumb_128'] = '/uploads/128_' . $fileName;
+            $all['thumb_255'] = '/uploads/255_' . $fileName;
+            $all['thumb_1024'] = '/uploads/1024_' . $fileName;
+            $image128 = Image::make(public_path($path))->fit(128)->save(public_path('/uploads/') . '128_' . $fileName);
+            $image256 = Image::make(public_path($path))->fit(255)->save(public_path('/uploads/') . '255_' . $fileName);
+            $image1024 = Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/') . '1024_' . $fileName);
+            $image128->save();
+            $image256->save();
+            $image1024->save();
+        }
+        $id->update($all);
 
         return response()->json([
             'message' => 'Great success! updated',

@@ -70,7 +70,13 @@ class ProductController extends Controller
             'discount' => 'nullable',
         ]);
 
-        $data = Product::create($request->all());
+        $all=$request->all();
+        echo $all;
+        $reg_id=District::where('id','=',$request->$all['district_id'])->first();
+        echo $reg_id;
+        $all['region_id'] = $reg_id->region_id;
+
+        $data = Product::create($all);
 
         return response()->json([
             'status' => 'ok',
@@ -155,3 +161,9 @@ class ProductController extends Controller
         ]);
     }
 }
+/*
+ * TODO install
+ * npm install
+ * auth install
+ * telescope install
+ */

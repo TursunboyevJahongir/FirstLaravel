@@ -41,6 +41,12 @@ Route::get('/customers/{customer}/delete', 'CustomersController@destroy');
 Route::get('ajax-pagination', 'AjaxController@ajaxPagination')->name('ajax.pagination');
 Route::get('send','mailController@send');
 
+//Route::get('user','site/UserController');
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 

@@ -29,29 +29,30 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+//        echo $request->image;
+//        die;
         $request->validate([
-            'address_id'=>'required',
-            'first_name'=>'required',
-            'last_name'=>'required',
-            'image'=>'nullable|file|image',
-            'email_verified_at'=>'nullable',
-            'phone'=>'required',
-            'password'=>'required',
-            'api_token'=>'nullable',
-            'remember_token'=>'nullable',
+            'address_id' => 'nullable',
+            'name' => 'required',
+            'image' => 'nullable|file|image',
+            'email_verified_at' => 'nullable',
+            'phone' => 'nullable',
+            'password' => 'required',
+            'api_token' => 'nullable',
+            'remember_token' => 'nullable',
         ]);
 
-        if(!$request->hasFile('image')) {
+        if (!$request->hasFile('image')) {
             return response()->json(['upload_file_not_found'], 400);
         }
         $file = $request->file('image');
-        if(!$file->isValid()) {
+        if (!$file->isValid()) {
             return response()->json(['invalid_file_upload'], 400);
         }
         $path = public_path() . '/uploads/users/';
-        $fileName = $file->getATime().'.'.$file->getClientOriginalExtension();
+        $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
         $file->move($path, $fileName);
-        $path = '/uploads/users/'.$fileName;
+        $path = '/uploads/users/' . $fileName;
 
         $all = $request->all();
         $all['image'] = $path;
@@ -69,7 +70,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return JsonResponse
      */
     public function show($id)
@@ -99,23 +100,42 @@ class UserController extends Controller
      */
     public function update(Request $request, User $id)
     {
+//        $request->input('name');
         $request->validate([
-            'address_id'=>'nullable',
-            'first_name'=>'nullable',
-            'last_name'=>'nullable',
-            'image'=>'nullable',
-            'email_verified_at'=>'nullable',
-            'phone'=>'nullable',
-            'password'=>'nullable',
-            'api_token'=>'nullable',
-            'remember_token'=>'nullable',
+            'address_id' => 'nullable',
+            'name' => 'nullable',
+            'image' => 'nullable',
+            'email_verified_at' => 'nullable',
+            'phone' => 'nullable',
+            'password' => 'nullable',
+            'api_token' => 'nullable',
+            'remember_token' => 'nullable',
         ]);
 
-        $id->update($request->all());
+        $all = $request->all();
+        if ($request->file('image')) {
+            if (!$request->hasFile('image')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('image');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/users/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/users/' . $fileName;
+
+            $all['image'] = $path;
+            $image = Image::make(public_path($path))->fit(300);
+            $image->save();
+//        $data = User::create($all);
+        }
+        $id->update($all);
 
         return response()->json([
             'message' => 'Great success! User updated',
-            'task' => $id,
+            'data' => $id,
         ]);
     }
 
