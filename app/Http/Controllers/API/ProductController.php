@@ -14,6 +14,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -30,7 +32,7 @@ class ProductController extends Controller
         // return $this->all(columns);
         // return \response()->json(Product::all('id','name'));
         // Table::where('id', 1)->get(['name','surname']);
-        $data = Product::select('id', 'name', 'description', 'price', 'default_image', 'discount', 'district_id')->orderBy($order, $sort);
+        $data = Product::select('id', 'name', 'description', 'price', 'image_id', 'discount', 'district_id')->orderBy($order, $sort);
         if ($request->get('min')) {
             $data->where('price', '>=', $request->get('min'));
         }
@@ -49,6 +51,7 @@ class ProductController extends Controller
             $data->where('region_id', '=', $request->get('region'));
         }
 
+
         return \response()->json($data->paginate(15)->appends($request->all(['category', 'max', 'min', 'order', 'sort'])));
     }
 
@@ -63,24 +66,57 @@ class ProductController extends Controller
             'category_id' => 'required',
             'shop_id' => 'required',
             'manufacturer_id' => 'required',
-            'default_image' => 'nullable',
             'name' => 'required|min:3',
             'price' => 'required|min:5',
             'description' => 'nullable',
-            'discount' => 'nullable',
+            'discount' => 'nullable|digits_between:0,100',
+            'photos' => 'nullable|image'
         ]);
 
-        $all=$request->all();
-        echo $all;
-        $reg_id=District::where('id','=',$request->$all['district_id'])->first();
-        echo $reg_id;
+        $all = $request->all();
+        $reg_id = District::where('id', '=', $all['district_id'])->first();
         $all['region_id'] = $reg_id->region_id;
 
         $data = Product::create($all);
 
+        $index = null;
+        if ($request->file('photos')) {
+            if (!$request->hasFile('photos')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+
+            $allowedfileExtension = ['jpg', 'png', 'jpeg'];
+            $files[] = $request->file('photos');
+
+            foreach ($files as $mediaFile) {
+                $extension = $mediaFile->getClientOriginalExtension();
+                $check = in_array($extension, $allowedfileExtension);
+                if ($check) {
+                    $media = new Image();
+                    $File = uniqid() . '.' . $extension;
+                    $mediaFile->move(public_path() . '/uploads/products/', $File);
+                    $path = 'uploads/products/' . $File;
+                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/products/') . '1024_' . $File);
+                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(255)->save(public_path('/uploads/products/') . '255_' . $File);
+                    $media->thumb_1024 = '/uploads/products/1024_' . $File;
+                    $media->thumb_255 = '/uploads/products/255_' . $File;
+                    $media->path = '/uploads/products/' . $File;
+                    $media->product_id = $data->id;
+                    $media->save();
+                    if (is_null($index)) {
+                        $index = $media->id;
+                    }
+                } else {
+                    return response()->json(['invalid_file_format'], 422);
+                }
+            }
+            $data->update([
+                'image_id' => $index
+            ]);
+        }
         return response()->json([
             'status' => 'ok',
-            'message' => 'Great success! New Shop created',
+            'message' => 'Great success! Product created',
             'data' => $data,
         ]);
     }
@@ -100,6 +136,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $data = Product::query()->where('id', '=', $id)->with('district', 'district.region', 'category', 'shop', 'image')->first();
+        $image = Image::query()->where('product_id', '=', $data->id)->get();
         if (is_null($data)) {
             return \response()->json([
                 'status' => 'error',
@@ -107,10 +144,21 @@ class ProductController extends Controller
                 'data' => null
             ]);
         } else {
+            /**
+             * view Counter
+             *
+             * UPDATE `products` SET `view` = `view`+1 WHERE id = (count)
+             */
+            $view = Product::where('id', '=', $id)->first();
+            $view->view += 1;
+            DB::table('products')
+                ->where('id', $id)
+                ->update(['view' => $view->view]);
             return \response()->json([
                 'status' => 'ok',
                 'message' => '',
-                'data' => $data
+                'data' => $data,
+                'images' => $image
             ]);
         }
     }
@@ -129,14 +177,32 @@ class ProductController extends Controller
             'category_id' => 'nullable',
             'shop_id' => 'nullable',
             'manufacturer_id' => 'nullable',
-            'default_image' => 'nullable',
+            'image' => 'nullable',
             'name' => 'nullable|min:3',
             'price' => 'nullable|min:5',
             'description' => 'nullable',
             'discount' => 'nullable',
         ]);
 
-        $id->update($request->all());
+        $all = $request->all();
+        if ($request->file('image')) {
+            if (!$request->hasFile('image')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('image');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/products/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/products/' . $fileName;
+
+            $all = $request->all();
+            $all['image'] = $path;
+        }
+
+        $id->update($all);
 
         return response()->json([
             'message' => 'Great success! Product updated',
@@ -161,9 +227,3 @@ class ProductController extends Controller
         ]);
     }
 }
-/*
- * TODO install
- * npm install
- * auth install
- * telescope install
- */

@@ -22,7 +22,6 @@ class AdvertiseController extends Controller
         return \response()->json(Advertise::paginate(15));
     }
 
-    //TODO
 
     /**
      * Store a newly created resource in storage.
@@ -96,10 +95,7 @@ class AdvertiseController extends Controller
         $request->validate([
             'title' => 'nullable',
             'body' => 'nullable',
-            'image' => 'nullable',
-            'thumb_128' => 'nullable',
-            'thumb_255' => 'nullable',
-            'thumb_1024' => 'nullable'
+            'image' => 'nullable'
         ]);
 
         $all = $request->all();

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $product_id
  * @property string $path
  * @property string $thumb_1024
- * @property string $thumb_256
+ * @property string $thumb_255
  * @property Product $product
  * @property Product[] $products
  */
@@ -19,7 +19,7 @@ class Image extends Model
     /**
      * @var array
      */
-    protected $fillable = ['product_id', 'path', 'thumb_1024', 'thumb_256'];
+    protected $fillable = ['product_id', 'path', 'thumb_1024', 'thumb_255'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -32,5 +32,5 @@ class Image extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    
+
 }

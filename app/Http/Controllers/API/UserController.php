@@ -29,8 +29,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-//        echo $request->image;
-//        die;
         $request->validate([
             'address_id' => 'nullable',
             'name' => 'required',

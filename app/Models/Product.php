@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $category_id
  * @property int $shop_id
  * @property int $manufacturer_id
- * @property int $default_image
+ * @property int $image
  * @property string $name
  * @property float $price
  * @property string $description
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Category $category
  * @property Manufacturer $manufacturer
  * @property Shop $shop
- * @property Image $image
+ * @property int $image_id
  * @property District $district
  * @property Favourite[] $favourites
  * @property Image[] $images
@@ -35,7 +35,7 @@ class Product extends Model
     /**
      * @var array
      */
-    protected $fillable = ['district_id', 'category_id', 'shop_id', 'manufacturer_id', 'default_image', 'name', 'price', 'description', 'discount', 'created_at', 'updated_at'];
+    protected $fillable = ['district_id', 'category_id', 'shop_id', 'manufacturer_id', 'image_id', 'name', 'price', 'description', 'discount', 'created_at', 'updated_at'];
 
     /**
      * @return BelongsTo
@@ -66,7 +66,7 @@ class Product extends Model
      */
     public function image()
     {
-        return $this->belongsTo('App\Models\Image', 'default_image');
+        return $this->belongsTo('App\Models\Image', 'image_id');
     }
 
     /**
