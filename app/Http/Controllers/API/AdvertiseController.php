@@ -34,7 +34,7 @@ class AdvertiseController extends Controller
         $request->validate([
             'title' => 'required',
             'body' => 'required',
-            'image' => 'nullable'
+            'image' => 'nullable|mimes:jpeg,bmp,png,jpg'
         ]);
 
         if (!$request->hasFile('image')) {
@@ -95,7 +95,7 @@ class AdvertiseController extends Controller
         $request->validate([
             'title' => 'nullable',
             'body' => 'nullable',
-            'image' => 'nullable'
+            'image' => 'nullable|mimes:jpeg,bmp,png,jpg'
         ]);
 
         $all = $request->all();

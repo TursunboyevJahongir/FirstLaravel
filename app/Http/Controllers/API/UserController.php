@@ -32,7 +32,7 @@ class UserController extends Controller
         $request->validate([
             'address_id' => 'nullable',
             'name' => 'required',
-            'image' => 'nullable|file|image',
+            'image' => 'nullable|',
             'email_verified_at' => 'nullable',
             'phone' => 'nullable',
             'password' => 'required',
@@ -102,7 +102,7 @@ class UserController extends Controller
         $request->validate([
             'address_id' => 'nullable',
             'name' => 'nullable',
-            'image' => 'nullable',
+            'image' => 'nullable|mimes:jpeg,bmp,png,jpg',
             'email_verified_at' => 'nullable',
             'phone' => 'nullable',
             'password' => 'nullable',

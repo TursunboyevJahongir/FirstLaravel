@@ -70,7 +70,7 @@ class ProductController extends Controller
             'price' => 'required|min:5',
             'description' => 'nullable',
             'discount' => 'nullable|digits_between:0,100',
-            'photos' => 'nullable|image'
+            'photos' => 'nullable'
         ]);
 
         $all = $request->all();
@@ -86,21 +86,21 @@ class ProductController extends Controller
             }
 
             $allowedfileExtension = ['jpg', 'png', 'jpeg'];
-            $files[] = $request->file('photos');
+            $files = $request->file('photos');
 
             foreach ($files as $mediaFile) {
                 $extension = $mediaFile->getClientOriginalExtension();
                 $check = in_array($extension, $allowedfileExtension);
                 if ($check) {
                     $media = new Image();
-                    $File = uniqid() . '.' . $extension;
-                    $mediaFile->move(public_path() . '/uploads/products/', $File);
-                    $path = 'uploads/products/' . $File;
-                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/products/') . '1024_' . $File);
-                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(255)->save(public_path('/uploads/products/') . '255_' . $File);
-                    $media->thumb_1024 = '/uploads/products/1024_' . $File;
-                    $media->thumb_255 = '/uploads/products/255_' . $File;
-                    $media->path = '/uploads/products/' . $File;
+                    $mFile = uniqid() . '.' . $extension;
+                    $mediaFile->move(public_path() . '/uploads/products/', $mFile);
+                    $path = 'uploads/products/' . $mFile;
+                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/products/') . '1024_' . $mFile);
+                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(255)->save(public_path('/uploads/products/') . '255_' . $mFile);
+                    $media->thumb_1024 = '/uploads/products/1024_' . $mFile;
+                    $media->thumb_255 = '/uploads/products/255_' . $mFile;
+                    $media->path = '/uploads/products/' . $mFile;
                     $media->product_id = $data->id;
                     $media->save();
                     if (is_null($index)) {
@@ -135,6 +135,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        $view = Product::where('id', '=', $id)->first();
+        $view->view += 1;
+        DB::table('products')
+            ->where('id', $id)
+            ->update(['view' => $view->view]);
         $data = Product::query()->where('id', '=', $id)->with('district', 'district.region', 'category', 'shop', 'image')->first();
         $image = Image::query()->where('product_id', '=', $data->id)->get();
         if (is_null($data)) {
@@ -149,11 +154,6 @@ class ProductController extends Controller
              *
              * UPDATE `products` SET `view` = `view`+1 WHERE id = (count)
              */
-            $view = Product::where('id', '=', $id)->first();
-            $view->view += 1;
-            DB::table('products')
-                ->where('id', $id)
-                ->update(['view' => $view->view]);
             return \response()->json([
                 'status' => 'ok',
                 'message' => '',
@@ -177,29 +177,42 @@ class ProductController extends Controller
             'category_id' => 'nullable',
             'shop_id' => 'nullable',
             'manufacturer_id' => 'nullable',
-            'image' => 'nullable',
             'name' => 'nullable|min:3',
             'price' => 'nullable|min:5',
             'description' => 'nullable',
             'discount' => 'nullable',
+            'photos' => 'nullable',
         ]);
 
         $all = $request->all();
-        if ($request->file('image')) {
-            if (!$request->hasFile('image')) {
+        if ($request->file('photos')) {
+            if (!$request->hasFile('photos')) {
                 return response()->json(['upload_file_not_found'], 400);
             }
-            $file = $request->file('image');
-            if (!$file->isValid()) {
-                return response()->json(['invalid_file_upload'], 400);
-            }
-            $path = public_path() . '/uploads/products/';
-            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
-            $file->move($path, $fileName);
-            $path = '/uploads/products/' . $fileName;
 
-            $all = $request->all();
-            $all['image'] = $path;
+            $allowedfileExtension = ['jpg', 'png', 'jpeg'];
+            $files = $request->file('photos');
+
+            foreach ($files as $mediaFile) {
+                $extension = $mediaFile->getClientOriginalExtension();
+                $check = in_array($extension, $allowedfileExtension);
+                if ($check) {
+                    $media = new Image();
+                    $mFile = uniqid() . '.' . $extension;
+                    $mediaFile->move(public_path() . '/uploads/products/', $mFile);
+                    $path = 'uploads/products/' . $mFile;
+                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/products/') . '1024_' . $mFile);
+                    \Intervention\Image\Facades\Image::make(public_path($path))->fit(255)->save(public_path('/uploads/products/') . '255_' . $mFile);
+                    $media->thumb_1024 = '/uploads/products/1024_' . $mFile;
+                    $media->thumb_255 = '/uploads/products/255_' . $mFile;
+                    $media->path = '/uploads/products/' . $mFile;
+                    $media->product_id = $id->id;
+                    $media->save();
+
+                } else {
+                    return response()->json(['invalid_file_format'], 422);
+                }
+            }
         }
 
         $id->update($all);

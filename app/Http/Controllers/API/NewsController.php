@@ -37,10 +37,7 @@ class NewsController extends Controller
             'shop_id' => 'required',
             'title' => 'required',
             'body' => 'required',
-            'image' => 'nullable',
-            'thumb_128' => 'nullable',
-            'thumb_255' => 'nullable',
-            'thumb_1024' => 'nullable'
+            'image' => 'nullable|mimes:jpeg,bmp,png,jpg',
         ]);
 //        $data = News::create($request->all());
 
@@ -117,10 +114,7 @@ class NewsController extends Controller
             'shop_id' => 'nullable',
             'title' => 'nullable',
             'body' => 'nullable',
-            'image' => 'nullable',
-            'thumb_128' => 'nullable',
-            'thumb_255' => 'nullable',
-            'thumb_1024' => 'nullable',
+            'image' => 'nullable|mimes:jpeg,bmp,png,jpg',
             'view' => 'nullable',
         ]);
         $all = $request->all();
