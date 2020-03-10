@@ -232,6 +232,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $id)
     {
+        
+
         $id->delete();
         return \response()->json([
             'status' => 'ok',

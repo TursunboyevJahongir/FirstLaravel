@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 
@@ -22,7 +24,7 @@ class ImageController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -85,11 +87,22 @@ class ImageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Image $id
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(\App\Models\Image $id)
     {
-        //
+        $product_id =$id->product_id;
+        unlink(public_path().$id->path);
+        unlink(public_path().$id->thumb_255);
+        unlink(public_path().$id->thumb_1024);
+        $id->delete();
+
+        return \response()->json([
+            'status' => 'ok',
+            'message' => '',
+            'data' => '/api/product/'.$product_id
+        ]);
     }
 }

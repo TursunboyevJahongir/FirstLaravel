@@ -125,6 +125,7 @@ class ManufacturerController extends Controller
      */
     public function destroy(Manufacturer $id)
     {
+        unlink(public_path().$id->ico);
         $id->delete();
         return \response()->json([
             'status' => 'ok',

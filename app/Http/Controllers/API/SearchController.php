@@ -27,8 +27,8 @@ class SearchController extends Controller
                                    'ShopCount' => $ShopCount,
                                    'Shops' => $Shop
                             ],
-                            "Show All Shops" => "http://lara.second/api/searchShops/" . $q,
-                            "Show All Products" => "http://lara.second/api/searchProducts/" . $q,
+                            "Show All Shops" => "/api/searchShops/" . $q,
+                            "Show All Products" => "/api/searchProducts/" . $q,
                      ]);
               else
                      return response()->json([

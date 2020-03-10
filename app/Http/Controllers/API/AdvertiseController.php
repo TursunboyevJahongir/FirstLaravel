@@ -140,6 +140,9 @@ class AdvertiseController extends Controller
      */
     public function destroy(Advertise $id)
     {
+        unlink(public_path().$id->image);
+        unlink(public_path().$id->thumb_255);
+        unlink(public_path().$id->thumb_1024);
         $id->delete();
         return \response()->json([
             'status' => 'ok',

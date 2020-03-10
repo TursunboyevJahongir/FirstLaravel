@@ -62,7 +62,7 @@ Route::resource('/manufacturer', 'API\ManufacturerController');
 Route::put('/news/{id}', 'API\NewsController@update');
 Route::resource('/news', 'API\NewsController');
 
-Route::resource('/image', 'API\ImageController');
+Route::delete('/image/{id}', 'API\ImageController@destroy');
 
 Route::get('/search/{q}', 'API\SearchController@search');
 
