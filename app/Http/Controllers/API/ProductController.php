@@ -232,7 +232,13 @@ class ProductController extends Controller
      */
     public function destroy(Product $id)
     {
-        
+        $images = Image::where('product_id', '=', $id->id)->get();
+        foreach ($images as $image):
+        unlink(public_path() . $image->path);
+        unlink(public_path() . $image->thumb_255);
+        unlink(public_path() . $image->thumb_1024);
+        $image->delete();
+        endforeach;
 
         $id->delete();
         return \response()->json([

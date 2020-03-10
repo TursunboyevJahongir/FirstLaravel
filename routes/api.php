@@ -37,6 +37,7 @@ Route::put('/shop/{id}', 'API\ShopController@update');
 Route::resource('/shop', 'API\ShopController');
 
 Route::put('/product/{id}', 'API\ProductController@update');
+Route::delete('/product/{id}', 'API\ProductController@destroy');
 Route::resource('/product', 'API\ProductController');
 
 Route::put('/favourite/{id}', 'API\FavouriteController@update');
