@@ -127,8 +127,7 @@ class ManufacturerController extends Controller
     public function destroy(Manufacturer $id)
     {
 
-//        unlink(public_path().$id->ico);
-
+        @unlink(public_path().$id->ico);
         $products = Product::where('manufacturer_id', '=', $id->id)->get();
         foreach ($products as $product):
             $images = \App\Models\Image::where('product_id', '=', $product->id)->get();
