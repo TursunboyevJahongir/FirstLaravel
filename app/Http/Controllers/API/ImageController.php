@@ -23,7 +23,7 @@ class ImageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return JsonResponse
      */
     public function store(Request $request)
@@ -64,7 +64,7 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -75,8 +75,8 @@ class ImageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -93,16 +93,16 @@ class ImageController extends Controller
      */
     public function destroy(\App\Models\Image $id)
     {
-        $product_id =$id->product_id;
-        unlink(public_path().$id->path);
-        unlink(public_path().$id->thumb_255);
-        unlink(public_path().$id->thumb_1024);
+        $product_id = $id->product_id;
+        @unlink(public_path() . $id->path);
+        @unlink(public_path() . $id->thumb_255);
+        @unlink(public_path() . $id->thumb_1024);
         $id->delete();
 
         return \response()->json([
             'status' => 'ok',
             'message' => '',
-            'data' => '/api/product/'.$product_id
+            'data' => '/api/product/' . $product_id
         ]);
     }
 }

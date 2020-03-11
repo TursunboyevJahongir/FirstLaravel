@@ -40,18 +40,18 @@ class CategoryController extends Controller
             if (!$request->hasFile('thumb')) {
                 return response()->json(['upload_file_not_found'], 400);
             }
-        $file = $request->file('thumb');
-        if (!$file->isValid()) {
-            return response()->json(['invalid_file_upload'], 400);
-        }
-        $path = public_path() . '/uploads/categories/';
-        $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
-        $file->move($path, $fileName);
-        $path = '/uploads/categories/' . $fileName;
-        $all['thumb'] = $path;
-        $all['thumb_128'] = '/uploads/categories/128_' . $fileName;
-        Image::make(public_path($path))->fit(128)->save(public_path('/uploads/categories/') . '128_' . $fileName)->save();
-        Image::make(public_path($path))->fit(1024)->save();
+            $file = $request->file('thumb');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/categories/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/categories/' . $fileName;
+            $all['thumb'] = $path;
+            $all['thumb_128'] = '/uploads/categories/128_' . $fileName;
+            Image::make(public_path($path))->fit(128)->save(public_path('/uploads/categories/') . '128_' . $fileName)->save();
+            Image::make(public_path($path))->fit(1024)->save();
         }
         $data = Category::create($all);
 
@@ -128,6 +128,19 @@ class CategoryController extends Controller
      */
     public function destroy(Category $id)
     {
+        @unlink(public_path() . $id->thumb);
+        @unlink(public_path() . $id->thumb_128);
+        $products = \App\Models\Product::where('category_id', '=', $id->id)->get();
+        foreach ($products as $product):
+            $images = \App\Models\Image::where('product_id', '=', $product->id)->get();
+            foreach ($images as $image):
+                @unlink(public_path() . $image->path);
+                @unlink(public_path() . $image->thumb_255);
+                @unlink(public_path() . $image->thumb_1024);
+                $image->delete();
+            endforeach;
+            $product->delete();
+        endforeach;
         $id->delete();
         return \response()->json([
             'status' => 'ok',

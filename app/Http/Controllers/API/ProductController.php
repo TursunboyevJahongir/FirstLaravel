@@ -75,7 +75,8 @@ class ProductController extends Controller
 
         $all = $request->all();
         $reg_id = District::where('id', '=', $all['district_id'])->first();
-        $all['region_id'] = $reg_id->region_id;
+        $reg_id = $reg_id->region_id;
+        $all['region_id'] = $reg_id;
 
         $data = Product::create($all);
 
@@ -135,25 +136,25 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $view = Product::where('id', '=', $id)->first();
-        $view->view += 1;
-        DB::table('products')
-            ->where('id', $id)
-            ->update(['view' => $view->view]);
         $data = Product::query()->where('id', '=', $id)->with('district', 'district.region', 'category', 'shop', 'image')->first();
-        $image = Image::query()->where('product_id', '=', $data->id)->get();
         if (is_null($data)) {
             return \response()->json([
                 'status' => 'error',
-                'message' => '',
+                'message' => 'not found',
                 'data' => null
             ]);
         } else {
+            $image = Image::query()->where('product_id', '=', $data->id)->get();
             /**
              * view Counter
              *
              * UPDATE `products` SET `view` = `view`+1 WHERE id = (count)
              */
+            $view = Product::where('id', '=', $id)->first();
+            $view->view += 1;
+            DB::table('products')
+                ->where('id', $id)
+                ->update(['view' => $view->view]);
             return \response()->json([
                 'status' => 'ok',
                 'message' => '',
@@ -234,10 +235,10 @@ class ProductController extends Controller
     {
         $images = Image::where('product_id', '=', $id->id)->get();
         foreach ($images as $image):
-        unlink(public_path() . $image->path);
-        unlink(public_path() . $image->thumb_255);
-        unlink(public_path() . $image->thumb_1024);
-        $image->delete();
+            @unlink(public_path() . $image->path);
+            @unlink(public_path() . $image->thumb_255);
+            @unlink(public_path() . $image->thumb_1024);
+            $image->delete();
         endforeach;
 
         $id->delete();

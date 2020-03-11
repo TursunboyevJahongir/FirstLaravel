@@ -146,8 +146,7 @@ class UserController extends Controller
      */
     public function destroy(User $id)
     {
-//        $product_id =$id->product_id;
-        unlink(public_path().$id->image);
+        @unlink(public_path() . $id->image);
         $id->delete();
         return \response()->json([
             'status' => 'ok',

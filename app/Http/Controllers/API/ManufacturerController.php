@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Manufacturer;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -125,11 +126,24 @@ class ManufacturerController extends Controller
      */
     public function destroy(Manufacturer $id)
     {
-        unlink(public_path().$id->ico);
+
+//        unlink(public_path().$id->ico);
+
+        $products = Product::where('manufacturer_id', '=', $id->id)->get();
+        foreach ($products as $product):
+            $images = \App\Models\Image::where('product_id', '=', $product->id)->get();
+            foreach ($images as $image):
+                @unlink(public_path() . $image->path);
+                @unlink(public_path() . $image->thumb_255);
+                @unlink(public_path() . $image->thumb_1024);
+                $image->delete();
+            endforeach;
+            $product->delete();
+        endforeach;
         $id->delete();
         return \response()->json([
             'status' => 'ok',
-            'message' => ' deleted',
+            'message' => '',
             'data' => null
         ]);
     }

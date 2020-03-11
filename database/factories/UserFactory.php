@@ -1,7 +1,9 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-use App\User;
+
+use App\Models\Address;
+use App\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -15,13 +17,25 @@ use Illuminate\Support\Str;
 | model instances for testing / seeding your application's database.
 |
 */
+function getAddr() {
+    $address = Address::inRandomOrder()->first();
+    if (!is_null($address)) {
+        return $address->id;
+    }else{
+   $address = factory(Address::class)->create();
+    }
+   return $address->id;
+}
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'address_id' => getAddr(),
+        'name' => $faker->lastName,
         'email' => $faker->unique()->safeEmail,
+        'phone' => $faker->e164PhoneNumber,
         'email_verified_at' => now(),
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'api_token' => Str::random(10),
         'remember_token' => Str::random(10),
     ];
 });

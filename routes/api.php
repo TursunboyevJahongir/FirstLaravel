@@ -34,6 +34,7 @@ Route::put('/address/{id}', 'API\AddressController@update');
 Route::resource('/address', 'API\AddressController');
 
 Route::put('/shop/{id}', 'API\ShopController@update');
+Route::delete('/shop/{id}', 'API\ShopController@destroy');
 Route::resource('/shop', 'API\ShopController');
 
 Route::put('/product/{id}', 'API\ProductController@update');
@@ -47,6 +48,7 @@ Route::put('/follower/{id}', 'Api\FollowerController@update');
 Route::resource('/follower', 'Api\FollowerController');
 
 Route::put('/category/{id}', 'API\CategoryController@update');
+Route::delete('/category/{id}', 'API\CategoryController@destroy');
 Route::resource('/category', 'API\CategoryController');
 
 Route::resource('/deliver', 'API\DeliverController');
@@ -58,6 +60,7 @@ Route::put('/advertise/{id}', 'API\AdvertiseController@update');
 Route::resource('/advertise', 'API\AdvertiseController');
 
 Route::put('/manufacturer/{id}', 'API\ManufacturerController@update');
+Route::delete('/manufacturer/{id}', 'API\ManufacturerController@destroy');
 Route::resource('/manufacturer', 'API\ManufacturerController');
 
 Route::put('/news/{id}', 'API\NewsController@update');
