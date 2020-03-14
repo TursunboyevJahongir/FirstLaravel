@@ -35,14 +35,6 @@ class Shop extends Model
         return $this->hasMany('App\Models\Follower');
     }
 
-    // public function getDescriptionAttribute() {
-    //     if ($this->short_desc) {
-    //         return mb_substr($this->attributes['description'], 0, 5);
-    //     }
-
-    //     return $this->attributes['description'];
-    // }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

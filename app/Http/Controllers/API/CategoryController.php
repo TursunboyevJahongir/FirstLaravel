@@ -115,7 +115,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Great success! Category updated',
-            'task' => $id,
+            'data' => $id,
         ]);
     }
 

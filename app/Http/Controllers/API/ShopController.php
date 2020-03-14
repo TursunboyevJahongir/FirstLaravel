@@ -21,11 +21,11 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $shop = Shop::get();
-        $shop = $shop->each(function ($el) {
-            return mb_substr($el->description, 0, 5);
-        });
-        return \response()->json($shop);
+//        $shop = Shop::get();
+//        $shop = $shop->each(function ($el) {
+//            return mb_substr($el->description, 0, 1, 1);
+//        });
+        return \response()->json(Shop::paginate(15));
     }
 
     /**
@@ -103,7 +103,7 @@ class ShopController extends Controller
 
         return response()->json([
             'message' => 'Great success! Task updated',
-            'task' => $id,
+            'data' => $id,
         ]);
     }
 

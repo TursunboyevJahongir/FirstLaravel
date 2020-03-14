@@ -11,10 +11,14 @@
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
+        "laravel/passport": "^8.4",
         "laravel/tinker": "^2.0",
+        "nyholm/psr7": "^1.2",
         "paragonie/random_compat": "~2.0",
         "spatie/laravel-pjax": "^2.0",
-        "twbs/bootstrap": "4.0.0"
+        "symfony/psr-http-message-bridge": "^1.0",
+        "twbs/bootstrap": "4.0.0",
+        "zendframework/zend-diactoros": "^2.2"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

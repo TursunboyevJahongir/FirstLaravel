@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,30 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+    Route::get('/ax', function (Request $request) {
+       echo "axaax";
+    });
 });
+
+Route::get('/sm', function (Request $request) {
+    $user = User::create([
+        'address_id' => 1,
+        'name' => 'axax',
+        'image' => 'axax',
+        'email' => 'salom@m.ru',
+        'phone' => '221',
+        'password' => \Illuminate\Support\Facades\Hash::make('123456'),
+        ''
+    ]);
+});
+
+//Route::group(['prefix' => 'v1'], function () {
+    Route::post('/login', 'API\UserController@login');
+    Route::post('/register', 'API\UserController@register');
+    Route::get('/logout', 'API\UserController@logout')->middleware('auth:api');
+//});
+
 Route::get('/login', 'API\LoginController@index');
 
 // Route::get('/users', 'API\UserController@index');

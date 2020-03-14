@@ -68,7 +68,7 @@ class FollowerController extends Controller
 
         return response()->json([
             'message' => 'Great success! updated',
-            'task' => $id,
+            'data' => $id,
         ]);
     }
 

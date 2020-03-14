@@ -70,24 +70,23 @@ class ProductController extends Controller
             'price' => 'required|min:5',
             'description' => 'nullable',
             'discount' => 'nullable|digits_between:0,100',
-            'photos' => 'nullable'
+            'images' => 'nullable'
         ]);
 
         $all = $request->all();
         $reg_id = District::where('id', '=', $all['district_id'])->first();
-        $reg_id = $reg_id->region_id;
-        $all['region_id'] = $reg_id;
+        $all['region_id'] = $reg_id->region_id;
 
         $data = Product::create($all);
 
         $index = null;
-        if ($request->file('photos')) {
-            if (!$request->hasFile('photos')) {
+        if ($request->file('images')) {
+            if (!$request->hasFile('images')) {
                 return response()->json(['upload_file_not_found'], 400);
             }
 
             $allowedfileExtension = ['jpg', 'png', 'jpeg'];
-            $files = $request->file('photos');
+            $files = $request->file('images');
 
             foreach ($files as $mediaFile) {
                 $extension = $mediaFile->getClientOriginalExtension();
@@ -182,17 +181,17 @@ class ProductController extends Controller
             'price' => 'nullable|min:5',
             'description' => 'nullable',
             'discount' => 'nullable',
-            'photos' => 'nullable',
+            'images' => 'nullable',
         ]);
 
         $all = $request->all();
-        if ($request->file('photos')) {
-            if (!$request->hasFile('photos')) {
+        if ($request->file('images')) {
+            if (!$request->hasFile('images')) {
                 return response()->json(['upload_file_not_found'], 400);
             }
 
             $allowedfileExtension = ['jpg', 'png', 'jpeg'];
-            $files = $request->file('photos');
+            $files = $request->file('images');
 
             foreach ($files as $mediaFile) {
                 $extension = $mediaFile->getClientOriginalExtension();
@@ -220,7 +219,7 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Great success! Product updated',
-            'task' => $id,
+            'data' => $id,
         ]);
     }
 

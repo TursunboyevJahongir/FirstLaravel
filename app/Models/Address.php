@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $district_id
  * @property string $name
  * @property District $district
- * @property OrderHistory[] $orderHistories
+ * @property Order_history[] $orderHistories
  * @property Order[] $orders
  * @property User[] $users
  */
@@ -19,7 +19,7 @@ class Address extends Model
     /**
      * @var array
      */
-    protected $fillable = ['district_id', 'name'];
+    protected $fillable = ['user_id','district_id', 'name'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

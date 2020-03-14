@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * @property int $id
@@ -21,15 +25,36 @@ use Illuminate\Database\Eloquent\Model;
  * @property Address $address
  * @property Favourite[] $favourites
  * @property Follower[] $followers
- * @property OrderHistory[] $orderHistories
+ * @property Order_history[] $orderHistories
  * @property Order[] $orders
  */
-class User extends Model
+class User extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
     /**
      * @var array
      */
-    protected $fillable = ['address_id', 'name', 'image', 'email', 'phone', 'password', 'api_token', 'remember_token', 'created_at', 'updated_at'];
+    protected $fillable =
+        ['address_id', 'name', 'photo', 'email', 'phone', 'password', 'api_token', 'remember_token', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -60,7 +85,7 @@ class User extends Model
      */
     public function orderHistories()
     {
-        return $this->hasMany('App\Models\OrderHistory');
+        return $this->hasMany('App\Models\Order_history');
     }
 
     /**

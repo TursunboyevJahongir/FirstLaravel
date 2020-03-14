@@ -74,7 +74,7 @@ class AddressController extends Controller
         $id->update($request->all());
         return response()->json([
             'message' => 'Great success! Address updated',
-            'task' => $id,
+            'data' => $id,
         ]);
 
     }
