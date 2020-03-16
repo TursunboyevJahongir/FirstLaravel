@@ -34,7 +34,7 @@ class SearchController extends Controller
                      return response()->json([
                             'status' => 'ok',
                             'message' => 'not found',
-                            'data' => null,
+                            'data' => '',
 
                      ]);
        }
@@ -53,7 +53,7 @@ class SearchController extends Controller
                      return response()->json([
                             'status' => 'ok',
                             'message' => 'not found',
-                            'data' => null,
+                            'data' => '',
                      ]);
        }
 

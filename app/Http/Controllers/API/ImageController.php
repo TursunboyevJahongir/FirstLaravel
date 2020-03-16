@@ -93,6 +93,13 @@ class ImageController extends Controller
      */
     public function destroy(\App\Models\Image $id)
     {
+        if($id->main_img){
+            return \response()->json([
+                'status' => 'error',
+                'message' => 'Siz asosiy rasmni o\'chirmoqchi siz oldin asosiy rasmni o\'zgartiring',
+                'data' => ''
+            ]);
+        }
         $product_id = $id->product_id;
         @unlink(public_path() . $id->path);
         @unlink(public_path() . $id->thumb_255);

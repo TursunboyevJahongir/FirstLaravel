@@ -48,6 +48,7 @@ Route::get('/login', 'API\LoginController@index');
 // Route::get('/users/{id}', 'API\UserController@show');
 // Route::post('/users', 'API\UserController@store');
 Route::resource('/user', 'API\UserController');
+Route::delete('/user/{id}', 'API\UserController@destroy');
 Route::put('/user/{id}', 'API\UserController@update');
 
 //Route::group(['middleware' => 'auth.api'],function (){
@@ -56,6 +57,7 @@ Route::put('/user/{id}', 'API\UserController@update');
 // Route::get('/addresses', 'API\AddressController@index');
 // Route::get('/address/{id}', 'API\AddressController@show');
 Route::put('/address/{id}', 'API\AddressController@update');
+Route::delete('/address/{id}', 'API\AddressController@destroy');
 Route::resource('/address', 'API\AddressController');
 
 Route::put('/shop/{id}', 'API\ShopController@update');
@@ -63,13 +65,17 @@ Route::delete('/shop/{id}', 'API\ShopController@destroy');
 Route::resource('/shop', 'API\ShopController');
 
 Route::put('/product/{id}', 'API\ProductController@update');
+Route::post('/product/main_image/{id}', 'API\ProductController@SetGlobalImage');
+Route::delete('/image_del/{id}', 'API\ImageController@destroy');
 Route::delete('/product/{id}', 'API\ProductController@destroy');
 Route::resource('/product', 'API\ProductController');
 
 Route::put('/favourite/{id}', 'API\FavouriteController@update');
+Route::delete('/favourite/{id}', 'API\FavouriteController@destroy');
 Route::resource('/favourite', 'API\FavouriteController');
 
 Route::put('/follower/{id}', 'Api\FollowerController@update');
+Route::delete('/follower/{id}', 'API\FollowerController@destroy');
 Route::resource('/follower', 'Api\FollowerController');
 
 Route::put('/category/{id}', 'API\CategoryController@update');
@@ -87,6 +93,7 @@ Route::delete('/region/{id}', 'API\RegionController@destroy');
 Route::resource('/region', 'API\RegionController');
 
 Route::put('/advertise/{id}', 'API\AdvertiseController@update');
+Route::delete('/advertise/{id}', 'API\AdvertiseController@destroy');
 Route::resource('/advertise', 'API\AdvertiseController');
 
 Route::put('/manufacturer/{id}', 'API\ManufacturerController@update');
@@ -94,6 +101,7 @@ Route::delete('/manufacturer/{id}', 'API\ManufacturerController@destroy');
 Route::resource('/manufacturer', 'API\ManufacturerController');
 
 Route::put('/news/{id}', 'API\NewsController@update');
+Route::delete('/news/{id}', 'API\NewsController@destroy');
 Route::resource('/news', 'API\NewsController');
 
 Route::delete('/image/{id}', 'API\ImageController@destroy');

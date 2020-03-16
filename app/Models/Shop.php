@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property int $phone
- * @property string $password
  * @property string $description
  * @property string $image
  * @property string $thumb
@@ -27,10 +26,10 @@ class Shop extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'phone', 'password', 'description', 'image', 'thumb',
+        'user_id', 'name', 'phone', 'description', 'image', 'thumb',
         'longitude', 'latitude', 'open_time', 'close_time', 'created_at', 'updated_at'
     ];
-    protected $hidden = ['password', 'created_at', 'updated_at'];
+    protected $hidden = [ 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

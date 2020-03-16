@@ -25,7 +25,7 @@ class LoginController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors()->first(),
-                'data' => null
+                'data' => ''
             ]);
         }
         $data = ['email' => $request->json('email'), 'password' => $request->json('password')];
@@ -43,7 +43,7 @@ class LoginController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'User not found',
-                'data' => null
+                'data' => ''
             ]);
         }
     }

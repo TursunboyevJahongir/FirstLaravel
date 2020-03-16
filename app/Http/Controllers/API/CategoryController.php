@@ -147,7 +147,7 @@ class CategoryController extends Controller
         return \response()->json([
             'status' => 'ok',
             'message' => 'category deleted',
-            'data' => null
+            'data' => ''
         ]);
     }
 }

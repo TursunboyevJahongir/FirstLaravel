@@ -90,7 +90,7 @@ class RegionController extends Controller
         return \response()->json([
             'status' => 'ok',
             'message' => ' deleted',
-            'data' => null
+            'data' => ''
         ]);
     }
 }

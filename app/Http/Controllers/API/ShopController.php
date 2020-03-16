@@ -37,7 +37,6 @@ class ShopController extends Controller
             'user_id' => 'required',
             'name' => 'required|min:3',
             'phone' => 'required|min:5',
-            'password' => 'required|min:6',
             'description' => 'required|min:10',
             'image' => 'nullable',
             'longitude' => 'required',
@@ -89,7 +88,7 @@ class ShopController extends Controller
             return \response()->json([
                 'status' => 'error',
                 'message' => 'Not found',
-                'data' => null,
+                'data' => '',
             ], 404);
         }
 
@@ -115,7 +114,6 @@ class ShopController extends Controller
             'user_id' => 'nullable',
             'name' => 'nullable|min:3',
             'phone' => 'nullable|min:5',
-            'password' => 'nullable|min:6',
             'description' => 'nullable|min:10',
             'image' => 'nullable',
             'longitude' => 'nullable',
@@ -181,7 +179,7 @@ class ShopController extends Controller
         return \response()->json([
             'status' => 'ok',
             'message' => '',
-            'data' => null
+            'data' => ''
         ]);
     }
 }

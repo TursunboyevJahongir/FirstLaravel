@@ -32,32 +32,41 @@ class AdvertiseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'shop_id' => 'required',
             'title' => 'required',
             'body' => 'required',
             'image' => 'nullable|mimes:jpeg,bmp,png,jpg'
         ]);
-
-        if (!$request->hasFile('image')) {
-            return response()->json(['upload_file_not_found'], 400);
-        }
-        $file = $request->file('image');
-        if (!$file->isValid()) {
-            return response()->json(['invalid_file_upload'], 400);
-        }
-        $path = public_path() . '/uploads/advertises/';
-        $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
-        $file->move($path, $fileName);
-        $path = '/uploads/advertises/' . $fileName;
-
-
         $all = $request->all();
-        $all['image'] = $path;
-        $all['thumb_128'] = '/uploads/advertises/128_' . $fileName;
-        $all['thumb_255'] = '/uploads/advertises/255_' . $fileName;
-        $all['thumb_1024'] = '/uploads/advertises/1024_' . $fileName;
-        Image::make(public_path($path))->fit(128)->save(public_path('/uploads/advertises/') . '128_' . $fileName)->save();
-        Image::make(public_path($path))->fit(255)->save(public_path('/uploads/advertises/') . '255_' . $fileName)->save();
-        Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/advertises/') . '1024_' . $fileName)->save();
+        if ($request->file('image')) {
+            $all['info_image'] = true;
+
+            if (!$request->hasFile('image')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('image');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/advertises/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/advertises/' . $fileName;
+
+            $all['image'] = $path;
+            $all['thumb_128'] = '/uploads/advertises/128_' . $fileName;
+            $all['thumb_255'] = '/uploads/advertises/255_' . $fileName;
+            $all['thumb_1024'] = '/uploads/advertises/1024_' . $fileName;
+            Image::make(public_path($path))->fit(128)->save(public_path('/uploads/advertises/') . '128_' . $fileName)->save();
+            Image::make(public_path($path))->fit(255)->save(public_path('/uploads/advertises/') . '255_' . $fileName)->save();
+            Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/advertises/') . '1024_' . $fileName)->save();
+        }
+        else{
+            $all['info_image'] = false;
+//            $all['image'] = ;
+
+        }
+
         $data = Advertise::create($all);
 
         return response()->json([
@@ -76,11 +85,22 @@ class AdvertiseController extends Controller
     public function show($id)
     {
         $data = Advertise::where('id', '=', $id)->first();
+
+        if(!empty($data->image))
         return \response()->json([
             'status' => 'ok',
             'message' => '',
             'data' => $data
         ]);
+        else{
+            $data = Advertise::where('id', '=', $id)->with('shop')->first();
+//            $image = $data->shop;
+            return \response()->json([
+                'status' => 'ok',
+                'message' => '',
+                'data' =>  $data
+            ]);
+        }
     }
 
     /**
@@ -150,7 +170,7 @@ class AdvertiseController extends Controller
         return \response()->json([
             'status' => 'ok',
             'message' => ' deleted',
-            'data' => null
+            'data' => ''
         ]);
     }
 }

@@ -144,7 +144,7 @@ class ManufacturerController extends Controller
         return \response()->json([
             'status' => 'ok',
             'message' => '',
-            'data' => null
+            'data' => ''
         ]);
     }
 }

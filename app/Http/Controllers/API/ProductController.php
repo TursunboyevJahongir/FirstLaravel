@@ -32,7 +32,7 @@ class ProductController extends Controller
         // return $this->all(columns);
         // return \response()->json(Product::all('id','name'));
         // Table::where('id', 1)->get(['name','surname']);
-        $data = Product::select('id', 'name', 'description', 'price', 'image_id', 'discount', 'district_id','category_id')->orderBy($order, $sort)->with('image');
+        $data = Product::select('id', 'name', 'description', 'price', 'image_id', 'discount', 'district_id', 'category_id')->orderBy($order, $sort)->with('image');
         if ($request->get('min')) {
             $data->where('price', '>=', $request->get('min'));
         }
@@ -71,7 +71,7 @@ class ProductController extends Controller
             'shop_id' => 'required',
             'manufacturer_id' => 'required',
             'name' => 'required|min:3',
-            'price' => 'required|min:5',
+            'price' => 'required',
             'description' => 'nullable',
             'discount' => 'nullable|digits_between:0,100',
             'images' => 'nullable'
@@ -117,6 +117,9 @@ class ProductController extends Controller
             $data->update([
                 'image_id' => $index
             ]);
+            DB::table('images')
+                ->where('id', $index)
+                ->update(['main_img' => 1]);
         }
         return response()->json([
             'status' => 'ok',
@@ -139,12 +142,12 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $data = Product::query()->where('id', '=', $id)->with('district', 'district.region', 'category', 'shop', 'image','images')->first();
+        $data = Product::query()->where('id', '=', $id)->with('district', 'district.region', 'category', 'shop', 'image', 'images')->first();
         if (is_null($data)) {
             return \response()->json([
                 'status' => 'error',
                 'message' => 'not found',
-                'data' => null
+                'data' => ''
             ]);
         } else {
             /**
@@ -165,6 +168,43 @@ class ProductController extends Controller
         }
     }
 
+    public function SetGlobalImage(Product $id, Request $request)
+    {
+        $past_image = $produt_id = Image::where('id', $id->image_id)->first();
+        $image = $request->post('image_id');
+
+        $produt_id = Image::where('id', $image)->first();
+        if (empty($produt_id))
+            return response()->json([
+                'status' => 'error',
+                'message' => ' bunday rasm mavjud emas !',
+                'data' => '',
+            ]);
+        if ($id->id != $produt_id->product_id)
+            return response()->json([
+                'status' => 'error',
+                'message' => ' Ma\'lumotlarda xatolik !',
+                'data' => '',
+            ]);
+        if ($image And $id->id = $produt_id->product_id) {
+            $produt_id->update(['main_img'=>true]);
+            $past_image->update(['main_img'=>false]);
+            $id->update([
+                'image_id' => $image
+            ]);
+            return response()->json([
+                'status' => 'ok',
+                'message' => 'asosiy rasm tanlandi',
+                'data' => $produt_id,
+            ]);
+        } else
+            return response()->json([
+                'status' => 'error',
+                'message' => " ma'lumotlarda xatolik !",
+                'data' => '',
+            ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -180,7 +220,7 @@ class ProductController extends Controller
             'shop_id' => 'nullable',
             'manufacturer_id' => 'nullable',
             'name' => 'nullable|min:3',
-            'price' => 'nullable|min:5',
+            'price' => 'nullable',
             'description' => 'nullable',
             'discount' => 'nullable',
             'images' => 'nullable',
@@ -246,7 +286,7 @@ class ProductController extends Controller
         return \response()->json([
             'status' => 'ok',
             'message' => '',
-            'data' => null
+            'data' => ''
         ]);
     }
 }

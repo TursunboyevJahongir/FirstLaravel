@@ -80,7 +80,7 @@ class UserController extends Controller
             return \response()->json([
                 'status' => 'error',
                 'message' => 'Not found',
-                'data' => null
+                'data' => ''
             ], 404);
         }
 
@@ -231,7 +231,7 @@ class UserController extends Controller
         return \response()->json([
             'status' => 'ok',
             'message' => '',
-            'data' => null
+            'data' => ''
         ]);
     }
 }
