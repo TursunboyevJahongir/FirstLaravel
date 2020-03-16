@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $phone
  * @property string $password
  * @property string $description
+ * @property string $image
+ * @property string $thumb
  * @property string $longitude
  * @property string $latitude
  * @property string $created_at
@@ -24,8 +26,11 @@ class Shop extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'phone', 'password', 'description', 'longitude', 'latitude', 'created_at', 'updated_at'];
-    protected $hidden = ['password'];
+    protected $fillable = [
+        'user_id', 'name', 'phone', 'password', 'description', 'image', 'thumb',
+        'longitude', 'latitude', 'open_time', 'close_time', 'created_at', 'updated_at'
+    ];
+    protected $hidden = ['password', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -41,6 +46,11 @@ class Shop extends Model
     public function news()
     {
         return $this->hasMany('App\Models\News');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     /**

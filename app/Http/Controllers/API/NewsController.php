@@ -85,10 +85,10 @@ class NewsController extends Controller
          * UPDATE `news` SET `view` = `view`+1 WHERE id = 36
          */
         $view = News::where('id', '=', $id)->first();
-        $view->view += 1;
+        $view->view_count += 1;
         DB::table('news')
             ->where('id', $id)
-            ->update(['view' => $view->view]);
+            ->update(['view_count' => $view->view_count]);
 
         /**
          * select one news
@@ -119,6 +119,10 @@ class NewsController extends Controller
         ]);
         $all = $request->all();
         if ($request->file('image')) {
+            @unlink(public_path() . $id->image);
+            @unlink(public_path() . $id->thumb_128);
+            @unlink(public_path() . $id->thumb_255);
+            @unlink(public_path() . $id->thumb_1024);
             if (!$request->hasFile('image')) {
                 return response()->json(['upload_file_not_found'], 400);
             }

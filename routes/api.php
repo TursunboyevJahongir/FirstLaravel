@@ -47,9 +47,12 @@ Route::get('/login', 'API\LoginController@index');
 // Route::get('/users', 'API\UserController@index');
 // Route::get('/users/{id}', 'API\UserController@show');
 // Route::post('/users', 'API\UserController@store');
-Route::put('/user/{id}', 'API\UserController@update');
 Route::resource('/user', 'API\UserController');
+Route::put('/user/{id}', 'API\UserController@update');
 
+//Route::group(['middleware' => 'auth.api'],function (){
+//
+//});
 // Route::get('/addresses', 'API\AddressController@index');
 // Route::get('/address/{id}', 'API\AddressController@show');
 Route::put('/address/{id}', 'API\AddressController@update');

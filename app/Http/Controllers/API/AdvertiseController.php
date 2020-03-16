@@ -100,6 +100,9 @@ class AdvertiseController extends Controller
 
         $all = $request->all();
         if ($request->file('image')) {
+            @unlink(public_path() . $id->image);
+            @unlink(public_path() . $id->thumb_255);
+            @unlink(public_path() . $id->thumb_1024);
             if (!$request->hasFile('image')) {
                 return response()->json(['upload_file_not_found'], 400);
             }

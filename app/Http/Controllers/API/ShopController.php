@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Image;
 use App\Models\Product;
 use App\Models\Shop;
 use Exception;
-use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class ShopController extends Controller
 {
@@ -37,15 +34,39 @@ class ShopController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'user_id' => 'required',
             'name' => 'required|min:3',
             'phone' => 'required|min:5',
             'password' => 'required|min:6',
             'description' => 'required|min:10',
+            'image' => 'nullable',
             'longitude' => 'required',
             'latitude' => 'required',
+            'open_time' => 'nullable',
+            'close_time' => 'nullable',
         ]);
+        $all = $request->all();
+        if ($request->file('image')) {
+            if (!$request->hasFile('image')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('image');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/shops/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/shops/' . $fileName;
 
-        $data = Shop::create($request->all());
+            $all['image'] = '/uploads/shops/1024_' . $fileName;
+            $all['thumb'] = '/uploads/shops/255_' . $fileName;
+
+            \Intervention\Image\Facades\Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/shops/') . '1024_' . $fileName)->save();
+            \Intervention\Image\Facades\Image::make(public_path($path))->fit(255)->save(public_path('/uploads/shops/') . '255_' . $fileName)->save();
+            @unlink(public_path() . $path);
+        }
+        $data = Shop::create($all);
 
         return response()->json([
             'status' => 'ok',
@@ -62,7 +83,7 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        $data = Shop::query()->where('id', '=', $id)->first();
+        $data = Shop::query()->where('id', '=', $id)->with('user')->first();
         // $check = $data->first();
         if (is_null($data)) {
             return \response()->json([
@@ -91,15 +112,42 @@ class ShopController extends Controller
     public function update(Request $request, Shop $id)
     {
         $request->validate([
-            'name' => 'nullable',
-            'phone' => 'nullable',
-            'password' => 'nullable',
-            'description' => 'nullable',
+            'user_id' => 'nullable',
+            'name' => 'nullable|min:3',
+            'phone' => 'nullable|min:5',
+            'password' => 'nullable|min:6',
+            'description' => 'nullable|min:10',
+            'image' => 'nullable',
             'longitude' => 'nullable',
             'latitude' => 'nullable',
+            'open_time' => 'nullable',
+            'close_time' => 'nullable',
         ]);
+        $all = $request->all();
+        if ($request->file('image')) {
+            @unlink(public_path() . $id->image);
+            @unlink(public_path() . $id->thumb);
+            if (!$request->hasFile('image')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $file = $request->file('image');
+            if (!$file->isValid()) {
+                return response()->json(['invalid_file_upload'], 400);
+            }
+            $path = public_path() . '/uploads/shops/';
+            $fileName = $file->getATime() . '.' . $file->getClientOriginalExtension();
+            $file->move($path, $fileName);
+            $path = '/uploads/shops/' . $fileName;
 
-        $id->update($request->all());
+            $all['image'] = '/uploads/shops/1024_' . $fileName;
+            $all['thumb'] = '/uploads/shops/255_' . $fileName;
+
+            \Intervention\Image\Facades\Image::make(public_path($path))->fit(1024)->save(public_path('/uploads/shops/') . '1024_' . $fileName)->save();
+            \Intervention\Image\Facades\Image::make(public_path($path))->fit(255)->save(public_path('/uploads/shops/') . '255_' . $fileName)->save();
+            @unlink(public_path() . $path);
+        }
+
+        $id->update($all);
 
         return response()->json([
             'message' => 'Great success! Task updated',
@@ -116,6 +164,8 @@ class ShopController extends Controller
      */
     public function destroy(Shop $id)
     {
+        @unlink(public_path() . $id->image);
+        @unlink(public_path() . $id->thumb);
         $products = Product::where('shop_id', '=', $id->id)->get();
         foreach ($products as $product):
             $images = \App\Models\Image::where('product_id', '=', $product->id)->get();

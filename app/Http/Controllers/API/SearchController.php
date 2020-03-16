@@ -12,7 +12,7 @@ class SearchController extends Controller
        public function search($q)
        {
               $count = Product::where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->count();
-              $product = Product::select('id', 'name', 'description', 'price', 'default_image', 'discount')->where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->limit(10)->get();
+              $product = Product::select('id', 'name', 'description', 'price', 'image_id', 'discount')->where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->limit(10)->get();
 
               $ShopCount = Shop::where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->count();
               $Shop = Shop::where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->limit(10)->get();
@@ -63,7 +63,7 @@ class SearchController extends Controller
               $sort = $request->get('sort') ?: 'desc';
 
               // $count = Product::where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->count();
-              $product = Product::select('id', 'name', 'description', 'price', 'default_image', 'discount')->where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->orderBy($order, $sort);
+              $product = Product::select('id', 'name', 'description', 'price', 'image_id', 'discount')->where('name', 'LIKE', '%' . $q . '%')->orWhere('description', 'LIKE', '%' . $q . '%')->orderBy($order, $sort);
               if ($request->get('min')) {
                      $product->where('price', '>=', $request->get('min'));
               }

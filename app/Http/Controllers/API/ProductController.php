@@ -32,7 +32,7 @@ class ProductController extends Controller
         // return $this->all(columns);
         // return \response()->json(Product::all('id','name'));
         // Table::where('id', 1)->get(['name','surname']);
-        $data = Product::select('id', 'name', 'description', 'price', 'image_id', 'discount', 'district_id')->orderBy($order, $sort);
+        $data = Product::select('id', 'name', 'description', 'price', 'image_id', 'discount', 'district_id','category_id')->orderBy($order, $sort)->with('image');
         if ($request->get('min')) {
             $data->where('price', '>=', $request->get('min'));
         }
@@ -40,11 +40,15 @@ class ProductController extends Controller
             $data->where('price', '<=', $request->get('max'));
         }
 
+//        if ($request->get('category')) {
+//            $cat_id = Category::where('name', '=', $request->get('category'))->first();
+//            if ($cat_id) {
+//                $data->where('category_id', '=', $cat_id->id);
+//            }
+//        }
+
         if ($request->get('category')) {
-            $cat_id = Category::where('name', '=', $request->get('category'))->first();
-            if ($cat_id) {
-                $data->where('category_id', '=', $cat_id->id);
-            }
+            $data->where('category_id', '=', $request->get('category'));
         }
 
         if ($request->get('region')) {
@@ -135,7 +139,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $data = Product::query()->where('id', '=', $id)->with('district', 'district.region', 'category', 'shop', 'image')->first();
+        $data = Product::query()->where('id', '=', $id)->with('district', 'district.region', 'category', 'shop', 'image','images')->first();
         if (is_null($data)) {
             return \response()->json([
                 'status' => 'error',
@@ -143,22 +147,20 @@ class ProductController extends Controller
                 'data' => null
             ]);
         } else {
-            $image = Image::query()->where('product_id', '=', $data->id)->get();
             /**
              * view Counter
              *
              * UPDATE `products` SET `view` = `view`+1 WHERE id = (count)
              */
             $view = Product::where('id', '=', $id)->first();
-            $view->view += 1;
+            $view->view_count += 1;
             DB::table('products')
                 ->where('id', $id)
-                ->update(['view' => $view->view]);
+                ->update(['view_count' => $view->view_count]);
             return \response()->json([
                 'status' => 'ok',
                 'message' => '',
                 'data' => $data,
-                'images' => $image
             ]);
         }
     }

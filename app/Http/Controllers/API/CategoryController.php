@@ -95,6 +95,8 @@ class CategoryController extends Controller
 
         $all = $request->all();
         if ($request->file('thumb')) {
+            @unlink(public_path() . $id->thumb);
+            @unlink(public_path() . $id->thumb_128);
             if (!$request->hasFile('thumb')) {
                 return response()->json(['upload_file_not_found'], 400);
             }

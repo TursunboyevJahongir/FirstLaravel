@@ -35,7 +35,7 @@ class Product extends Model
     /**
      * @var array
      */
-    protected $fillable = ['district_id','region_id', 'category_id', 'shop_id', 'manufacturer_id', 'image_id', 'name', 'price', 'description', 'discount', 'created_at', 'updated_at'];
+    protected $fillable = ['district_id', 'region_id', 'view_count', 'category_id', 'shop_id', 'manufacturer_id', 'image_id', 'name', 'price', 'description', 'discount', 'created_at', 'updated_at'];
 
     /**
      * @return BelongsTo

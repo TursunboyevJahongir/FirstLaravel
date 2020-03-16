@@ -23,7 +23,7 @@ class News extends Model
     /**
      * @var array
      */
-    protected $fillable = ['shop_id', 'title', 'body', 'image', 'thumb_128', 'thumb_255', 'thumb_1024', 'view', 'created_at', 'updated_at'];
+    protected $fillable = ['shop_id', 'title', 'body', 'image', 'thumb_128', 'thumb_255', 'thumb_1024', 'view_count', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

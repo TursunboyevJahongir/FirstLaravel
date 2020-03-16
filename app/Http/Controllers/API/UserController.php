@@ -40,8 +40,6 @@ class UserController extends Controller
             'email_verified_at' => 'nullable',
             'phone' => 'nullable|unique:users',
             'password' => 'required',
-            'api_token' => 'nullable',
-            'remember_token' => 'nullable',
         ]);
 
         if (!$request->hasFile('photo')) {
@@ -114,6 +112,7 @@ class UserController extends Controller
 
         $all = $request->all();
         if ($request->file('photo')) {
+            @unlink(public_path() . $id->photo);
             if (!$request->hasFile('photo')) {
                 return response()->json(['upload_file_not_found'], 400);
             }
@@ -165,7 +164,7 @@ class UserController extends Controller
             //if authentication is unsuccessfull, notice how I return json parameters
             return response()->json([
                 'status' => 'error',
-                'message' => 'Invalid Email or Password',
+                'message' => 'Invalid Email|Name or Password',
             ], 401);
         }
     }

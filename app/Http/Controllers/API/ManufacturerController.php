@@ -93,6 +93,7 @@ class ManufacturerController extends Controller
         $all = $request->all();
         if ($request->file()) {
             if (!$request->hasFile('ico')) {
+                @unlink(public_path() . $id->ico);
                 return response()->json(['upload_file_not_found'], 400);
             }
             $file = $request->file('ico');

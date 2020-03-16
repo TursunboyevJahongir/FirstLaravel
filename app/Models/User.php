@@ -13,7 +13,7 @@ use Laravel\Passport\HasApiTokens;
  * @property int $address_id
  * @property string $first_name
  * @property string $last_name
- * @property string $image
+ * @property string $photo
  * @property string $email
  * @property string $email_verified_at
  * @property string $phone
@@ -38,7 +38,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password','created_at','updated_at'
     ];
 
     /**
