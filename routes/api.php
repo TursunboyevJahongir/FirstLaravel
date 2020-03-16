@@ -79,7 +79,12 @@ Route::resource('/category', 'API\CategoryController');
 Route::resource('/deliver', 'API\DeliverController');
 
 Route::put('/district/{id}', 'API\DistrictController@update');
+Route::delete('/district/{id}', 'API\DistrictController@destroy');
 Route::resource('/district', 'API\DistrictController');
+
+Route::put('/region/{id}', 'API\RegionController@update');
+Route::delete('/region/{id}', 'API\RegionController@destroy');
+Route::resource('/region', 'API\RegionController');
 
 Route::put('/advertise/{id}', 'API\AdvertiseController@update');
 Route::resource('/advertise', 'API\AdvertiseController');

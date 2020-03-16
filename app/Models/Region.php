@@ -17,6 +17,7 @@ class Region extends Model
      * @var array
      */
     protected $fillable = ['name'];
+    public $timestamps = false;
 
     /**
      * @return HasMany
