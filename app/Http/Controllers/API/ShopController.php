@@ -39,8 +39,8 @@ class ShopController extends Controller
             'phone' => 'required|min:5',
             'description' => 'required|min:10',
             'image' => 'nullable',
-            'longitude' => 'required',
-            'latitude' => 'required',
+            'longitude' => 'nullable',
+            'latitude' => 'nullable',
             'open_time' => 'nullable',
             'close_time' => 'nullable',
         ]);
@@ -65,6 +65,7 @@ class ShopController extends Controller
             \Intervention\Image\Facades\Image::make(public_path($path))->fit(255)->save(public_path('/uploads/shops/') . '255_' . $fileName)->save();
             @unlink(public_path() . $path);
         }
+        $all['status'] = -1;
         $data = Shop::create($all);
 
         return response()->json([

@@ -27,9 +27,27 @@ class Shop extends Model
      */
     protected $fillable = [
         'user_id', 'name', 'phone', 'description', 'image', 'thumb',
-        'longitude', 'latitude', 'open_time', 'close_time', 'created_at', 'updated_at'
+        'longitude', 'latitude', 'open_time', 'close_time', 'created_at','status' ,'updated_at'
     ];
     protected $hidden = [ 'created_at', 'updated_at'];
+
+    public function getStatusAttribute($attribute)
+    {
+        return $this->activeOptions()[$attribute];
+    }
+    
+    protected $attributes = [
+        'status' => 1
+    ];
+    
+    public function activeOptions()
+    {
+        return [
+            '1' => 'Active',
+            '0' => 'Inactive',
+            '-1' => 'sdInactive',
+        ];
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

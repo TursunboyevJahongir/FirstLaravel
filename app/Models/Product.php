@@ -37,6 +37,7 @@ class Product extends Model
      */
     protected $fillable = ['district_id', 'region_id', 'view_count', 'category_id', 'shop_id', 'manufacturer_id', 'image_id', 'name', 'price', 'description', 'discount', 'created_at', 'updated_at'];
 
+    protected $hidden = [ 'created_at', 'updated_at'];
     /**
      * @return BelongsTo
      */

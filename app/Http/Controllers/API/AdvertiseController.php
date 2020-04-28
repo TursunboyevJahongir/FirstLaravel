@@ -34,7 +34,6 @@ class AdvertiseController extends Controller
         $request->validate([
             'shop_id' => 'required',
             'title' => 'required',
-            'body' => 'required',
             'image' => 'nullable|mimes:jpeg,bmp,png,jpg'
         ]);
         $all = $request->all();
@@ -63,8 +62,6 @@ class AdvertiseController extends Controller
         }
         else{
             $all['info_image'] = false;
-//            $all['image'] = ;
-
         }
 
         $data = Advertise::create($all);
@@ -114,7 +111,6 @@ class AdvertiseController extends Controller
     {
         $request->validate([
             'title' => 'nullable',
-            'body' => 'nullable',
             'image' => 'nullable|mimes:jpeg,bmp,png,jpg'
         ]);
 

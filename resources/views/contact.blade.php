@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 @extends('layout')
 
 @section('title')
@@ -10,6 +10,3 @@
 
     <p>Contact us</p>
 @endsection
-=======
-<?php
->>>>>>> 40d886f... \Illuminate\Support\Facades\Route::view('about','about');

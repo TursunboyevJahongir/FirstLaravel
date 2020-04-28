@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * @property int $id
@@ -28,7 +28,7 @@ use Laravel\Passport\HasApiTokens;
  * @property Order_history[] $orderHistories
  * @property Order[] $orders
  */
-class User extends Authenticatable
+class User extends \TCG\Voyager\Models\User
 {
     use HasApiTokens, Notifiable;
 

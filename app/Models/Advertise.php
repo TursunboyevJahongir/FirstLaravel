@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $shop_id
  * @property string $title
- * @property string $body
  * @property boolean $info_image
  * @property string $image
  * @property string $thumb_128
@@ -31,8 +30,9 @@ class Advertise extends Model
     /**
      * @var array
      */
-    protected $fillable = ['shop_id', 'title', 'body', 'info_image', 'image', 'thumb_128', 'thumb_255', 'thumb_1024', 'created_at', 'updated_at'];
+    protected $fillable = ['shop_id', 'title', 'info_image', 'image', 'thumb_128', 'thumb_255', 'thumb_1024', 'created_at', 'updated_at'];
 
+    protected $hidden = [ 'created_at', 'updated_at'];
     /**
      * @return void
      */

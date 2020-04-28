@@ -29,4 +29,6 @@ class Deliver extends Model
      */
     protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'longitude', 'latitude', 'created_at', 'updated_at'];
 
+    protected $hidden = [ 'created_at', 'updated_at'];
+
 }

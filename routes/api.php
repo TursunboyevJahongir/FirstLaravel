@@ -24,41 +24,28 @@ Route::middleware('auth:api')->group(function () {
     });
 });
 
-Route::get('/sm', function (Request $request) {
-    $user = User::create([
-        'address_id' => 1,
-        'name' => 'axax',
-        'image' => 'axax',
-        'email' => 'salom@m.ru',
-        'phone' => '221',
-        'password' => \Illuminate\Support\Facades\Hash::make('123456'),
-        ''
-    ]);
-});
-
 //Route::group(['prefix' => 'v1'], function () {
     Route::post('/login', 'API\UserController@login');
     Route::post('/register', 'API\UserController@register');
     Route::get('/logout', 'API\UserController@logout')->middleware('auth:api');
-//});
+    //});
+    
+    Route::get('/login', 'API\LoginController@index');
+    
+    // Route::get('/user', 'API\UserController@index')->middleware('auth:api');
+    Route::group(['middleware' => 'auth:api'],function (){
+        Route::get('/user', 'API\UserController@index');
+        Route::get('/users/{id}', 'API\UserController@show');
+    });
+    Route::post('/user', 'API\UserController@store');
+    Route::put('/user/{id}', 'API\UserController@update');
+    Route::delete('/user/{id}', 'API\UserController@destroy');
 
-Route::get('/login', 'API\LoginController@index');
-
-// Route::get('/users', 'API\UserController@index');
-// Route::get('/users/{id}', 'API\UserController@show');
-// Route::post('/users', 'API\UserController@store');
-Route::resource('/user', 'API\UserController');
-Route::delete('/user/{id}', 'API\UserController@destroy');
-Route::put('/user/{id}', 'API\UserController@update');
-
-//Route::group(['middleware' => 'auth.api'],function (){
-//
-//});
 // Route::get('/addresses', 'API\AddressController@index');
 // Route::get('/address/{id}', 'API\AddressController@show');
+Route::resource('/address', 'API\AddressController');
 Route::put('/address/{id}', 'API\AddressController@update');
 Route::delete('/address/{id}', 'API\AddressController@destroy');
-Route::resource('/address', 'API\AddressController');
 
 Route::put('/shop/{id}', 'API\ShopController@update');
 Route::delete('/shop/{id}', 'API\ShopController@destroy');

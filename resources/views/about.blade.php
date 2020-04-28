@@ -5,6 +5,8 @@
 
 @section('content')
     <h1>About</h1>
-
-    <p>About us</p>
+    @foreach ($users as $user)
+        
+    <li>{{$user->name}}</li>
+    @endforeach
 @endsection

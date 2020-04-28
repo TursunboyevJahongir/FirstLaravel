@@ -23,6 +23,8 @@ class Image extends Model
      */
     protected $fillable = ['product_id','main_img', 'path', 'thumb_1024', 'thumb_255'];
 
+    protected $hidden = [ 'main_img','product_id'];
+
     /**
      * @return BelongsTo
      */

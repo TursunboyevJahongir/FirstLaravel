@@ -25,6 +25,8 @@ class News extends Model
      */
     protected $fillable = ['shop_id', 'title', 'body', 'image', 'thumb_128', 'thumb_255', 'thumb_1024', 'view_count', 'created_at', 'updated_at'];
 
+    protected $hidden = [ 'created_at', 'updated_at'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
