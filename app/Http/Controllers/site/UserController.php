@@ -5,6 +5,7 @@ namespace App\Http\Controllers\site;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -62,5 +63,23 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function logout(Request $res)
+    {
+        if (Auth::user()) {
+            $user = Auth::user()->token();
+            $user->revoke();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout successfully'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to Logout'
+            ]);
+        }
     }
 }

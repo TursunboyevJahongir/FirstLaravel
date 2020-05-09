@@ -32,7 +32,8 @@ class CategoryController extends Controller
     {
         $request->validate([
             'parent_id' => 'nullable',
-            'name' => 'required',
+            'name' => 'required|unique:categories',
+            'slug' => 'required|unique:categories',
             'thumb' => 'nullable',
         ]);
         $all = $request->all();
@@ -90,6 +91,7 @@ class CategoryController extends Controller
         $request->validate([
             'parent_id' => 'nullable',
             'name' => 'nullable',
+            'slug' => 'nullable',
             'thumb' => 'nullable',
         ]);
 

@@ -20,7 +20,7 @@ class Category extends Model
     /**
      * @var array
      */
-    protected $fillable = ['parent_id', 'name', 'thumb', 'thumb_128'];
+    protected $fillable = ['parent_id', 'name','slug', 'thumb', 'thumb_128'];
     public $timestamps = false;
     /**
      * @return BelongsTo

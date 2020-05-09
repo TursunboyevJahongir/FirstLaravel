@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class 20200414064423AddForeignKeyToAddress extends Migration
+class AddSlugToProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class 20200414064423AddForeignKeyToAddress extends Migration
      */
     public function up()
     {
-        Schema::table('address', function (Blueprint $table) {
-            //
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('slug',255)->uniqid()->after('id');
         });
     }
 
@@ -25,7 +25,7 @@ class 20200414064423AddForeignKeyToAddress extends Migration
      */
     public function down()
     {
-        Schema::table('address', function (Blueprint $table) {
+        Schema::table('product', function (Blueprint $table) {
             //
         });
     }

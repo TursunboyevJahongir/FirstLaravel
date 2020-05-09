@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $image
  * @property string $name
  * @property float $price
+ * @property float $slug
+ * @property float $count_product
  * @property string $description
  * @property int $discount
  * @property string $created_at
@@ -35,7 +37,7 @@ class Product extends Model
     /**
      * @var array
      */
-    protected $fillable = ['district_id', 'region_id', 'view_count', 'category_id', 'shop_id', 'manufacturer_id', 'image_id', 'name', 'price', 'description', 'discount', 'created_at', 'updated_at'];
+    protected $fillable = ['district_id', 'region_id','slug', 'view_count', 'category_id', 'shop_id', 'manufacturer_id', 'image_id', 'name', 'price', 'description', 'discount','count_product', 'created_at', 'updated_at'];
 
     protected $hidden = [ 'created_at', 'updated_at'];
     /**

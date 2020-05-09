@@ -11,6 +11,7 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,6 +41,7 @@ Route::resource('customers', 'CustomersController');
 Route::get('/customers/{customer}/delete', 'CustomersController@destroy');
 Route::get('ajax-pagination', 'AjaxController@ajaxPagination')->name('ajax.pagination');
 Route::get('send','mailController@send');
+Route::get('logout','site\UserController@logout');
 
 //Route::get('user','site/UserController');
 

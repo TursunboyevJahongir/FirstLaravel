@@ -54,7 +54,7 @@ class User extends \TCG\Voyager\Models\User
      * @var array
      */
     protected $fillable =
-        ['address_id', 'name', 'photo', 'email', 'phone', 'password', 'api_token', 'remember_token', 'created_at', 'updated_at'];
+        ['role_id','avatar','address_id', 'name', 'photo', 'email', 'phone', 'password', 'api_token', 'remember_token', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

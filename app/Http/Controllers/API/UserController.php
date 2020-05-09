@@ -36,16 +36,16 @@ class UserController extends Controller
             'address_id' => 'nullable',
             'name' => 'required|unique:users',
             'email' => 'required|unique:users',
-            'photo' => 'nullable',
+            'avatar' => 'nullable',
             'email_verified_at' => 'nullable',
             'phone' => 'nullable|unique:users',
             'password' => 'required',
         ]);
 
-        if (!$request->hasFile('photo')) {
+        if (!$request->hasFile('avatar')) {
             return response()->json(['upload_file_not_found'], 400);
         }
-        $file = $request->file('photo');
+        $file = $request->file('avatar');
         if (!$file->isValid()) {
             return response()->json(['invalid_file_upload'], 400);
         }
@@ -55,9 +55,9 @@ class UserController extends Controller
         $path = '/uploads/users/' . $fileName;
 
         $all = $request->all();
-        $all['photo'] = $path;
-        $photo = Image::make(public_path($path))->fit(300);
-        $photo->save();
+        $all['avatar'] = $path;
+        $avatar = Image::make(public_path($path))->fit(300);
+        $avatar->save();
         $data = User::create($all);
 
         return response()->json([
@@ -104,19 +104,19 @@ class UserController extends Controller
         $request->validate([
             'address_id' => 'nullable',
             'name' => 'nullable',
-            'photo' => 'nullable|mimes:jpeg,bmp,png,jpg',
+            'avatar' => 'nullable|mimes:jpeg,bmp,png,jpg',
             'email_verified_at' => 'nullable',
             'phone' => 'nullable|regex:/(0)[0-9]{10}/',
             'password' => 'nullable',
         ]);
 
         $all = $request->all();
-        if ($request->file('photo')) {
-            @unlink(public_path() . $id->photo);
-            if (!$request->hasFile('photo')) {
+        if ($request->file('avatar')) {
+            @unlink(public_path() . $id->avatar);
+            if (!$request->hasFile('avatar')) {
                 return response()->json(['upload_file_not_found'], 400);
             }
-            $file = $request->file('photo');
+            $file = $request->file('avatar');
             if (!$file->isValid()) {
                 return response()->json(['invalid_file_upload'], 400);
             }
@@ -125,9 +125,9 @@ class UserController extends Controller
             $file->move($path, $fileName);
             $path = '/uploads/users/' . $fileName;
 
-            $all['photo'] = $path;
-            $photo = Image::make(public_path($path))->fit(300);
-            $photo->save();
+            $all['avatar'] = $path;
+            $avatar = Image::make(public_path($path))->fit(300);
+            $avatar->save();
 //        $data = User::create($all);
         }
         $id->update($all);
@@ -226,7 +226,7 @@ class UserController extends Controller
      */
     public function destroy(User $id)
     {
-        @unlink(public_path() . $id->photo);
+        @unlink(public_path() . $id->avatar);
         $id->delete();
         return \response()->json([
             'status' => 'ok',
