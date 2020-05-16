@@ -52,7 +52,7 @@ class Product extends Model
      * @return BelongsTo
      */
     public function manufacturer()
-    {
+    { 
         return $this->belongsTo('App\Models\Manufacturer', 'manufacturer_id');
     }
 
