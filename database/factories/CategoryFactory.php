@@ -17,6 +17,7 @@ use Faker\Generator as Faker;
 $factory->define(Category::class, function (Faker $faker) {
     return [
         'parent_id' => getParent(),
+        'slug' =>$faker->slug,
         'name' => $faker->FirstName,
         'thumb' => $faker->randomNumber,
         'thumb_128' => $faker->randomNumber,
