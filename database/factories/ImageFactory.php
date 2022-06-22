@@ -17,6 +17,6 @@ $factory->define(Image::class, function (Faker $faker) {
         'product_id' => getProduct(),
         'path' => $faker->text(5),
         'thumb_1024' => $faker->text(5),
-        'thumb_256' => $faker->text(5),
+        'thumb_255' => $faker->text(5),
     ];
 });

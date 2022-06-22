@@ -9,9 +9,11 @@ $factory->define(Shop::class, function (Faker $faker) {
     return [
         'name' => $faker->company,
         'phone' => $faker->e164PhoneNumber,
-        'password' => $faker ->password,
         'description' => $faker->text(200),
+        'image' => $faker->text(20),
+        'thumb' => $faker->text(20),
         'longitude' =>$faker->longitude,
         'latitude'=>$faker->latitude,
+        'status' =>$faker->slug,
     ];
 });

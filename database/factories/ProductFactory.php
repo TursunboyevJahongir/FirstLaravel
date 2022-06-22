@@ -21,15 +21,18 @@ use Faker\Generator as Faker;
 $factory->define(Product::class, function (Faker $faker) {
     $des = getDistrict2();
     return [
+        'slug' => $faker->slug,
         'district_id'=> $des,
         'region_id'=> $des->region_id,
         'category_id'=>getCategory(),
         'shop_id'=>getShop(),
         'manufacturer_id'=>getManufacturer(),
         'name'=>$faker->text(20),
-        'default_image'=>getImage(),
         'price'=>$faker->randomNumber(5),
+        'image_id'=>getImage(),
         'description'=>$faker->text(20),
         'discount'=> $faker->numberBetween(0,95),
+        'view_count'=>$faker->numberBetween(0,500),
+        'count_product'=>$faker->numberBetween(0,500),
     ];
 });
